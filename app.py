@@ -35,10 +35,7 @@ st.markdown(
 
 ROOT = Path(__file__).resolve().parent
 html = (ROOT / "index.html").read_text(encoding="utf-8")
-avatar_path = ROOT / "metpro_avatar.png"
-if not avatar_path.exists():
-    avatar_path = ROOT / "assets" / "metpro_avatar.png"
-avatar_bytes = avatar_path.read_bytes()
+avatar_bytes = (ROOT / "assets" / "metpro_avatar.png").read_bytes()
 avatar_b64 = base64.b64encode(avatar_bytes).decode("ascii")
 html = html.replace("__AVATAR_DATA__", f"data:image/png;base64,{avatar_b64}")
 
