@@ -14,19 +14,36 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-      html, body, [data-testid="stAppViewContainer"], .stApp {
+      html, body, [data-testid="stAppViewContainer"], .stApp, [data-testid="stMain"] {
         background: #f8fafc !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
-      [data-testid="stHeader"], [data-testid="stToolbar"], footer, #MainMenu {
+      [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], footer, #MainMenu {
         display: none !important;
       }
-      .block-container {
+      .block-container, [data-testid="stMainBlockContainer"] {
         padding: 0 !important;
+        margin: 0 !important;
         max-width: none !important;
+      }
+      [data-testid="stVerticalBlock"] {
+        gap: 0 !important;
+      }
+      [data-testid="stElementContainer"] {
+        margin: 0 !important;
+        padding: 0 !important;
       }
       iframe {
         display: block;
-        margin: 0 auto;
+        margin: 0 auto !important;
+        border: 0 !important;
+        background: #fff !important;
+      }
+      @media (max-width: 559px) {
+        html, body, [data-testid="stAppViewContainer"], .stApp, [data-testid="stMain"] {
+          background: #fff !important;
+        }
       }
     </style>
     """,
