@@ -231,12 +231,12 @@
     <p class="profile-intro">A few background details let Adapt personalize your targets while keeping the main experience beautifully simple.</p>
     <div class="profile-card">
       <label class="input-label">Age</label><input id="profileAge" class="text-input" type="number" min="18" max="100" inputmode="numeric" />
-      <label class="input-label">Sex <span style="color:#9aa7b8;font-weight:400">(used for screening & optional body-fat classification)</span></label>
+      <label class="input-label">Sex <span style="color:#9aa7b8;font-weight:400">(used for protein calibration, screening & optional body-fat classification)</span></label>
       <select id="profileSex" class="select-input"><option value="male">Male</option><option value="female">Female</option></select>
       <label class="input-label">Height</label>
       <div class="field-row"><div><input id="profileFeet" class="text-input" type="number" min="3" max="7" inputmode="numeric" placeholder="ft" /></div><div><input id="profileInches" class="text-input" type="number" min="0" max="11" inputmode="numeric" placeholder="in" /></div></div>
       <label class="input-label">Current weight</label><input id="profileWeight" class="text-input" type="number" min="60" max="700" step="0.1" inputmode="decimal" />
-      <div class="safety-box"><strong>Why we ask</strong><br />Height and age are kept in the background. They help Adapt recognize when lower intake controls should be quietly protected. Sex does not create a separate meal plan.</div>
+      <div class="safety-box"><strong>Why we ask</strong><br />Height and age are kept in the background. They help Adapt recognize when lower intake controls should be quietly protected. Sex does not create a separate meal plan; it helps Adapt choose the appropriate starting point within the protein range.</div>
       <button class="profile-save" id="profileSave">Save Profile</button>
       <div class="profile-fine" id="profileFine">After setup, the Complete Profile prompt disappears. Use the small profile icon on the main screen anytime to edit these details.</div>
     </div>
@@ -256,7 +256,10 @@
     4:["Higher Intake","Adjusts total intake"],
     5:["Highest Intake","Adjusts total intake"]
   };
-  const PROTEIN_FACTORS = {moderate:.5, balanced:.7, performance:.9};
+  const PROTEIN_FACTORS = {
+    female:{moderate:.5, balanced:.7, performance:.9},
+    male:{moderate:.6, balanced:.8, performance:.9}
+  };
   const BODY_FACTORS = {lower:1.0, moderate:.95, higher:.85};
   const DEFAULT = {
     profileComplete:false, age:35, sex:'male', feet:5, inches:10, weight:208,
@@ -274,9 +277,15 @@
   function saveState(){ localStorage.setItem('metpro_adapt_v1', JSON.stringify(state)); }
   function round5(x){ return Math.floor(x/5 + .5)*5; }
   function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
-  function calcWeight(){ return Math.min(state.weight * BODY_FACTORS[state.bodyComp], 300); }
+  function calcWeightFor(comp=state.bodyComp){ return Math.min(state.weight * BODY_FACTORS[comp], 300); }
+  function calcWeight(){ return calcWeightFor(state.bodyComp); }
+  function formatLb(x){ const n=Math.round(x*10)/10; return Number.isInteger(n)?String(n):n.toFixed(1); }
   function proteinFloor(){ return round5(calcWeight() * .5); }
-  function proteinTarget(){ return round5(calcWeight() * PROTEIN_FACTORS[state.proteinSetting]); }
+  function proteinFactor(setting=state.proteinSetting){
+    const sex = state.sex === 'female' ? 'female' : 'male';
+    return PROTEIN_FACTORS[sex][setting];
+  }
+  function proteinTarget(){ return round5(calcWeight() * proteinFactor()); }
   function phaseProtein(){
     const t = proteinTarget(); const floor = proteinFloor();
     if(state.proteinSetting === 'moderate'){
@@ -293,7 +302,11 @@
     if(w <= 200) return (w-140)*.5;
     return 30 + (w-200)*.25;
   }
-  function phaseCarbs(){ return round5(BASE_CARBS[state.phase] + carbModifier()); }
+  function phaseCarbs(){
+    const calculated = round5(BASE_CARBS[state.phase] + carbModifier());
+    if(state.sex === 'male' && state.phase === 3) return Math.max(170, calculated);
+    return calculated;
+  }
   function phaseFat(){ return BASE_FAT[state.phase]; }
   function macros(){
     return {
@@ -388,15 +401,20 @@
     $('saveWeight').onclick=()=>{ const v=parseFloat($('weightInput').value); if(v>=60&&v<=700){state.weight=v; state.adj={protein:0,carbs:0,fat:0}; saveState(); closeOverlay(); render(); toast(protection()!=='none'?'Adaptive protection active':'Weight updated');} };
   }
   function openBodyComp(){
-    const option=(key,title,desc)=>`<button class="choice ${state.bodyComp===key?'selected':''}" data-comp="${key}"><strong>${title}</strong><small>${desc}</small></button>`;
-    openOverlay(`<h2>Body Composition</h2><p class="lead">Choose the description that best fits today. These are MetPro wellness categories, not medical diagnoses.</p><div class="choice-list">${option('lower','Lower','Relatively lean with visible muscular definition.')}${option('moderate','Moderate','Somewhere in the middle — neither especially lean nor carrying substantial excess body fat.')}${option('higher','Higher','Currently carrying a significant amount of excess body fat.')}</div><label class="input-label">Know your body-fat percentage? <span style="color:#98a5b7">Optional</span></label><input id="bfInput" class="text-input" type="number" min="3" max="70" step="0.1" placeholder="e.g. 24" value="${state.bodyFatPct??''}"><div class="tiny-note">If entered, the percentage is used only to place you into Lower / Moderate / Higher using the MetPro wellness classification.</div><div class="sheet-actions"><button class="secondary" id="cancelComp">Cancel</button><button class="primary" id="saveComp">Apply</button></div>`);
-    let selected=state.bodyComp; document.querySelectorAll('[data-comp]').forEach(b=>b.onclick=()=>{selected=b.dataset.comp;document.querySelectorAll('[data-comp]').forEach(x=>x.classList.toggle('selected',x===b));});
+    const option=(key,title,pct,desc)=>`<button class="choice ${state.bodyComp===key?'selected':''}" data-comp="${key}"><strong>${title} — ${pct}%</strong><small>${desc}</small></button>`;
+    openOverlay(`<h2>Body Composition</h2><p class="lead">Choose the description that best fits today. Body composition adjusts the weight Adapt uses for protein calculations.</p><div class="choice-list">${option('lower','Lower','100','Relatively lean with visible muscular definition.')}${option('moderate','Moderate','95','Somewhere in the middle — neither especially lean nor carrying substantial excess body fat.')}${option('higher','Higher','85','Currently carrying a significant amount of excess body fat.')}</div><div class="safety-box"><strong>Scale Weight:</strong> ${formatLb(state.weight)} lb<br /><strong>MetPro Calculation Weight:</strong> <span id="calcWeightPreview">${formatLb(calcWeight())}</span> lb<br /><span style="color:#7f8da3">Protein targets use Calculation Weight rather than scale weight so targets are not overstated as body composition changes.</span></div><label class="input-label">Know your body-fat percentage? <span style="color:#98a5b7">Optional</span></label><input id="bfInput" class="text-input" type="number" min="3" max="70" step="0.1" placeholder="e.g. 24" value="${state.bodyFatPct??''}"><div class="tiny-note">If entered, the percentage is used only to place you into Lower / Moderate / Higher using the MetPro wellness classification.</div><div class="sheet-actions"><button class="secondary" id="cancelComp">Cancel</button><button class="primary" id="saveComp">Apply</button></div>`);
+    let selected=state.bodyComp;
+    document.querySelectorAll('[data-comp]').forEach(b=>b.onclick=()=>{
+      selected=b.dataset.comp;
+      document.querySelectorAll('[data-comp]').forEach(x=>x.classList.toggle('selected',x===b));
+      $('calcWeightPreview').textContent=formatLb(calcWeightFor(selected));
+    });
     $('cancelComp').onclick=closeOverlay;
     $('saveComp').onclick=()=>{ const bf=parseFloat($('bfInput').value); if(!Number.isNaN(bf)){state.bodyFatPct=bf; if(state.sex==='male') state.bodyComp=bf<20?'lower':bf<30?'moderate':'higher'; else state.bodyComp=bf<30?'lower':bf<42?'moderate':'higher';} else {state.bodyFatPct=null;state.bodyComp=selected;} state.adj={protein:0,carbs:0,fat:0}; saveState();closeOverlay();render();toast('Body composition updated'); };
   }
   function openProtein(){
     const option=(key,title,rate,desc,rec='')=>`<button class="choice ${state.proteinSetting===key?'selected':''}" data-protein="${key}"><strong>${title} — ${rate} g/lb ${rec?`<span class="rec">${rec}</span>`:''}</strong><small>${desc}</small></button>`;
-    openOverlay(`<h2>Protein Target</h2><p class="lead">Choose how much protein demand fits your current goals. Adapt uses your weight and body-composition setting to calculate the grams.</p><div class="choice-list">${option('moderate','Moderate','0.5','General wellness, lighter activity, or a lower-protein preference.')}${option('balanced','Balanced','0.7','Supports lean mass, exercise recovery, and body-composition goals for most active adults.','Recommended')}${option('performance','Performance','0.9','Frequent resistance training, high-performance goals, or a strong priority on muscle development and retention.')}</div><div class="safety-box"><strong>Current calculated target:</strong> <span id="targetPreview">${proteinTarget()}g</span><br />The intake level can make small changes around this target while Adapt protects the lower protein boundary and a 290g upper ceiling.</div><div class="sheet-actions"><button class="secondary" id="cancelProtein">Cancel</button><button class="primary" id="saveProtein">Apply</button></div>`);
+    openOverlay(`<h2>Protein Target</h2><p class="lead">Choose the protein range that best fits your goals. Adapt selects a starting point within that range using your profile and <strong>MetPro Calculation Weight</strong>.</p><div class="choice-list">${option('moderate','Moderate','0.5–0.6','General wellness, lighter activity, or a lower-protein preference.')}${option('balanced','Balanced','0.7–0.8','Supports lean mass, exercise recovery, and body-composition goals for most active adults.','Recommended')}${option('performance','Performance','0.8–0.9','Frequent resistance training, high-performance goals, or a strong priority on muscle development and retention.')}</div><div class="safety-box"><strong>Scale Weight:</strong> ${formatLb(state.weight)} lb<br /><strong>MetPro Calculation Weight:</strong> ${formatLb(calcWeight())} lb<br /><strong>Current calculated target:</strong> <span id="targetPreview">${proteinTarget()}g</span><br /><span style="color:#7f8da3">The intake level can make small changes around this target while Adapt protects the lower protein boundary and a 290g upper ceiling.</span></div><div class="sheet-actions"><button class="secondary" id="cancelProtein">Cancel</button><button class="primary" id="saveProtein">Apply</button></div>`);
     let selected=state.proteinSetting; document.querySelectorAll('[data-protein]').forEach(b=>b.onclick=()=>{selected=b.dataset.protein;document.querySelectorAll('[data-protein]').forEach(x=>x.classList.toggle('selected',x===b)); const old=state.proteinSetting; state.proteinSetting=selected; $('targetPreview').textContent=`${proteinTarget()}g`; state.proteinSetting=old;});
     $('cancelProtein').onclick=closeOverlay;
     $('saveProtein').onclick=()=>{state.proteinSetting=selected;state.adj={protein:0,carbs:0,fat:0};saveState();closeOverlay();render();toast('Protein target updated');};
