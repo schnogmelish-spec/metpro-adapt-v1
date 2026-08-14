@@ -26,12 +26,12 @@
   .brand{text-align:center;font-weight:380;letter-spacing:-1.2px;font-size:35px;line-height:1.08;margin:3px 0 0;color:#10284d}
   .mini-profile{position:absolute;top:27px;right:22px;height:37px;width:37px;border-radius:50%;border:1px solid #e2e9f2;background:rgba(255,255,255,.96);color:#7184a1;display:none;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(25,52,88,.035);z-index:8;padding:0}
   .mini-profile.show{display:grid}.mini-profile:active{transform:scale(.94)}
- .avatar-wrap{height:150px;display:flex;align-items:center;justify-content:center;margin-top:4px;position:relative}
- .avatar{width:142px;max-width:46%;filter:drop-shadow(0 7px 13px rgba(31,104,255,.10));animation:floaty 4.6s ease-in-out infinite, glow 4.1s ease-in-out infinite;cursor:default}
+ .avatar-wrap{height:152px;display:flex;align-items:center;justify-content:center;margin-top:0;position:relative}
+ .avatar{width:168px;max-width:52%;filter:drop-shadow(0 9px 15px rgba(31,104,255,.15)) contrast(1.035) saturate(1.06);animation:floaty 4.6s ease-in-out infinite, glow 4.1s ease-in-out infinite;cursor:default}
   @keyframes floaty{0%,100%{transform:translateY(2px)}50%{transform:translateY(-5px)}}
-  @keyframes glow{0%,100%{filter:drop-shadow(0 7px 14px rgba(31,104,255,.10))}50%{filter:drop-shadow(0 10px 21px rgba(31,104,255,.24))}}
+  @keyframes glow{0%,100%{filter:drop-shadow(0 9px 15px rgba(31,104,255,.15)) contrast(1.035) saturate(1.06)}50%{filter:drop-shadow(0 11px 22px rgba(31,104,255,.28)) contrast(1.045) saturate(1.08)}}
 
-  .section-title{text-align:center;font-size:24px;font-weight:400;letter-spacing:-.45px;margin:0 0 14px}
+  .section-title{text-align:center;font-size:24px;font-weight:400;letter-spacing:-.45px;margin:-2px 0 14px}
   .profile-prompt{border:1px solid #e4ebf4;background:rgba(255,255,255,.99);box-shadow:0 7px 18px rgba(21,48,88,.045);border-radius:22px;padding:11px 14px;display:flex;align-items:center;gap:12px;margin:0 18px 17px;cursor:pointer;transition:.18s ease}
   .profile-prompt:active{transform:scale(.988)}
   .profile-icon{height:38px;width:38px;border:1px solid #dbe5f2;border-radius:50%;display:grid;place-items:center;color:#8193b1;flex:none}
