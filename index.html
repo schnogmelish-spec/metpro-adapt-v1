@@ -26,7 +26,56 @@
   .brand{text-align:center;font-weight:380;letter-spacing:-1.2px;font-size:35px;line-height:1.08;margin:3px 0 0;color:#10284d}
   .mini-profile{position:absolute;top:27px;right:22px;height:37px;width:37px;border-radius:50%;border:1px solid #e2e9f2;background:rgba(255,255,255,.96);color:#7184a1;display:none;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(25,52,88,.035);z-index:8;padding:0}
   .mini-profile.show{display:grid}.mini-profile:active{transform:scale(.94)}
- .avatar-wrap{height:152px;display:flex;align-items:center;justify-content:center;margin-top:0;position:relative}
+.avatar-wrap{
+  height:168px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:2px;
+  position:relative;
+}
+
+.avatar-wrap::before{
+  content:"";
+  position:absolute;
+  width:182px;
+  height:182px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(18,103,255,.10) 0%, rgba(18,103,255,.05) 38%, rgba(18,103,255,0) 72%);
+  filter:blur(10px);
+  opacity:.9;
+  animation:haloPulse 5.4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.avatar{
+  position:relative;
+  z-index:1;
+  width:182px;
+  max-width:56%;
+  filter:drop-shadow(0 12px 20px rgba(31,104,255,.14)) contrast(1.03) saturate(1.04);
+  animation:avatarIdle 6.2s ease-in-out infinite, avatarGlow 4.8s ease-in-out infinite;
+  transform-origin:50% 42%;
+  will-change:transform,filter;
+  cursor:default;
+}
+
+@keyframes avatarIdle{
+  0%,100%{transform:translateY(0) rotate(-.7deg) scale(1)}
+  25%{transform:translateY(-3px) rotate(.2deg) scale(1.006)}
+  50%{transform:translateY(-6px) rotate(.8deg) scale(1.012)}
+  75%{transform:translateY(-2px) rotate(0deg) scale(1.004)}
+}
+
+@keyframes avatarGlow{
+  0%,100%{filter:drop-shadow(0 12px 20px rgba(31,104,255,.14)) contrast(1.03) saturate(1.04)}
+  50%{filter:drop-shadow(0 16px 28px rgba(31,104,255,.24)) contrast(1.05) saturate(1.08)}
+}
+
+@keyframes haloPulse{
+  0%,100%{transform:scale(.96); opacity:.58}
+  50%{transform:scale(1.04); opacity:.92}
+}
  .avatar{width:168px;max-width:52%;filter:drop-shadow(0 9px 15px rgba(31,104,255,.15)) contrast(1.035) saturate(1.06);animation:floaty 4.6s ease-in-out infinite, glow 4.1s ease-in-out infinite;cursor:default}
   @keyframes floaty{0%,100%{transform:translateY(2px)}50%{transform:translateY(-5px)}}
   @keyframes glow{0%,100%{filter:drop-shadow(0 9px 15px rgba(31,104,255,.15)) contrast(1.035) saturate(1.06)}50%{filter:drop-shadow(0 11px 22px rgba(31,104,255,.28)) contrast(1.045) saturate(1.08)}}
