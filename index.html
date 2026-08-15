@@ -431,9 +431,9 @@
   }
   @keyframes tacticalEyesLook{
     0%,20%,100%{transform:translateX(-50%) translate(0,0)}
-    30%,38%{transform:translateX(-50%) translate(-2px,0)}
+    30%,38%{transform:translateX(-50%) translate(-1px,0)}
     47%,64%{transform:translateX(-50%) translate(0,0)}
-    72%,80%{transform:translateX(-50%) translate(2px,0)}
+    72%,80%{transform:translateX(-50%) translate(1px,0)}
     88%,96%{transform:translateX(-50%) translate(0,0)}
   }
   @keyframes tacticalBlink{
@@ -485,12 +485,12 @@
      The live eyes then sit directly on top, preserving the original visor shape. */
   .shell.tactical .avatar-body::after{content:none}
   .shell.tactical .avatar-eyes{
-    opacity:1;top:32.15%;width:58px;height:14px;gap:12px;z-index:5;
+    opacity:1;top:32.15%;width:54px;height:14px;gap:10px;z-index:5;
     animation:tacticalEyesLook 8.8s ease-in-out infinite;
   }
   .shell.tactical .avatar-eyes::before,
   .shell.tactical .avatar-eyes::after{
-    content:"";position:absolute;top:50%;width:25px;height:8px;
+    content:"";position:absolute;top:50%;width:22px;height:8px;
     transform:translateY(-50%);border-radius:999px;z-index:-1;pointer-events:none;
     background:rgba(5,20,43,.97);
     box-shadow:0 0 6px rgba(5,20,43,.92);
@@ -498,7 +498,7 @@
   .shell.tactical .avatar-eyes::before{left:-1px}
   .shell.tactical .avatar-eyes::after{right:-1px}
   .shell.tactical .avatar-eye{
-    width:19px;height:3.5px;background:var(--tactical-blue);
+    width:17px;height:3.5px;background:var(--tactical-blue);
     box-shadow:0 0 4px rgba(255,255,255,.74),
                0 0 8px rgba(47,140,255,.98),
                0 0 14px rgba(47,140,255,.70);
