@@ -415,11 +415,11 @@
     100%{transform:rotate(360deg)}
   }
   @keyframes tacticalEyesLook{
-    0%,18%,100%{transform:translateX(-50%) translate(0,0)}
-    27%,36%{transform:translateX(-50%) translate(-3px,.2px)}
-    45%,62%{transform:translateX(-50%) translate(0,0)}
-    70%,79%{transform:translateX(-50%) translate(3px,-.2px)}
-    87%,96%{transform:translateX(-50%) translate(0,0)}
+    0%,20%,100%{transform:translateX(-50%) translate(0,0)}
+    30%,38%{transform:translateX(-50%) translate(-2px,0)}
+    47%,64%{transform:translateX(-50%) translate(0,0)}
+    72%,80%{transform:translateX(-50%) translate(2px,0)}
+    88%,96%{transform:translateX(-50%) translate(0,0)}
   }
   @keyframes tacticalBlink{
     0%,40%,44%,72%,76%,100%{transform:scaleY(1)}
@@ -446,38 +446,53 @@
     background:radial-gradient(circle,rgba(47,140,255,.22) 0%,rgba(47,140,255,.10) 36%,rgba(255,59,59,.025) 58%,rgba(7,17,31,0) 75%);
     filter:blur(5px);
   }
+  /* Tactical orbit stays on the same elegant ellipse as normal mode.
+     Only the light/dashes travel around it — the whole oval does NOT cartwheel. */
   .shell.tactical .genome-svg{
     opacity:.96;
     filter:drop-shadow(0 0 7px rgba(47,140,255,.70));
-    transform-origin:50% 50%;
-    animation:tacticalOrbitSpin 8.4s linear infinite;
+    transform:none;
+    animation:none;
   }
   .shell.tactical .orbit-main{
     stroke:var(--tactical-blue);stroke-width:1.7;opacity:.98;
-    stroke-dasharray:4 5;
+    stroke-dasharray:3 5;
+    animation:orbitDash 6.9s linear infinite;
   }
   .shell.tactical .genome-dot{fill:var(--tactical-blue)}
   .shell.tactical .genome-dot.d2{
     fill:var(--tactical-red);
     filter:drop-shadow(0 0 6px rgba(255,59,59,.98));
   }
+
+  /* The tactical source art contains its own eye glow.  A small visor-colored
+     mask hides those baked-in bars so the live eyes can blink/look naturally. */
+  .shell.tactical .avatar-body::after{
+    content:"";position:absolute;left:50%;top:31.7%;width:104px;height:18px;
+    transform:translateX(-50%);z-index:3;pointer-events:none;border-radius:50%;
+    background:linear-gradient(180deg,rgba(4,17,38,.98),rgba(3,14,32,.99));
+    box-shadow:inset 0 0 12px rgba(47,140,255,.08);
+  }
   .shell.tactical .avatar-eyes{
-    opacity:1;top:36.4%;width:67px;height:16px;gap:15px;
-    animation:tacticalEyesLook 8.1s ease-in-out infinite;
+    opacity:1;top:32.2%;width:60px;height:14px;gap:13px;z-index:5;
+    animation:tacticalEyesLook 8.8s ease-in-out infinite;
   }
   .shell.tactical .avatar-eye{
-    width:21px;height:4px;background:var(--tactical-blue);
-    box-shadow:0 0 4px rgba(255,255,255,.76),
+    width:20px;height:3.7px;background:var(--tactical-blue);
+    box-shadow:0 0 4px rgba(255,255,255,.74),
                0 0 8px rgba(47,140,255,.98),
-               0 0 16px rgba(47,140,255,.76);
-    animation:tacticalBlink 7.6s ease-in-out infinite;
+               0 0 14px rgba(47,140,255,.70);
+    animation:tacticalBlink 8.6s ease-in-out infinite;
   }
   .shell.tactical .visor-sheen{
-    opacity:.28;top:18.5%;width:105px;height:63px;
+    opacity:.22;top:18.5%;width:105px;height:63px;z-index:4;
   }
   .shell.tactical .badge-thinking{opacity:0}
   .shell.tactical .avatar-body{width:244px;height:174px;top:2px}
   .shell.tactical .avatar{
+    /* Clip away the tiny orbit fragments baked into the mockup artwork.
+       The live SVG orbit above is now the only visible ring. */
+    clip-path:polygon(50% 7%,68% 18%,74% 43%,72% 61%,64% 76%,56% 89%,50% 96%,44% 89%,35% 76%,28% 61%,26% 43%,32% 18%);
     filter:drop-shadow(0 10px 18px rgba(0,0,0,.24)) drop-shadow(0 0 10px rgba(47,140,255,.42));
     animation:tacticalShellGlow 4.8s ease-in-out infinite;
   }
