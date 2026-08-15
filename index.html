@@ -372,6 +372,21 @@
   .avatar-body{transition:width .42s ease,height .42s ease,top .42s ease,filter .42s ease}
   .genome-svg,.avatar-eyes,.visor-sheen,.badge-thinking,.avatar-aura{transition:opacity .32s ease,filter .42s ease}
 
+  /* During the secret mode shift, slow the visual crossfade so the user can
+     actually register the system changing states. Normal app interactions stay fast. */
+  .shell.mode-shifting{transition:background 1.35s ease,border-color 1.35s ease,box-shadow 1.35s ease,color 1.35s ease}
+  .shell.mode-shifting .brand,.shell.mode-shifting .adaptive-title h2,.shell.mode-shifting .adaptive-title p,
+  .shell.mode-shifting .status-card,.shell.mode-shifting .status-icon-well,.shell.mode-shifting .phase-track,
+  .shell.mode-shifting .phase-btn,.shell.mode-shifting .macro-card,.shell.mode-shifting .macro-icon,
+  .shell.mode-shifting .macro-grams,.shell.mode-shifting .macro-bar,.shell.mode-shifting .macro-adjust button,
+  .shell.mode-shifting .summary,.shell.mode-shifting .summary-icon,.shell.mode-shifting .footer-lock,
+  .shell.mode-shifting .eyebrow,.shell.mode-shifting .mini-profile{
+    transition-duration:1.35s !important;
+  }
+  .shell.mode-shifting .avatar-body{transition-duration:1.15s !important}
+  .shell.mode-shifting .genome-svg,.shell.mode-shifting .avatar-eyes,.shell.mode-shifting .visor-sheen,
+  .shell.mode-shifting .badge-thinking,.shell.mode-shifting .avatar-aura{transition-duration:1.05s !important}
+
   .mode-ack{
     position:absolute;left:50%;bottom:2px;transform:translate(-50%,6px) scale(.96);
     color:#eef6ff;background:rgba(7,17,31,.90);border:1px solid rgba(47,140,255,.44);
@@ -396,13 +411,13 @@
     box-shadow:0 0 14px rgba(255,59,59,.48),inset 0 0 12px rgba(255,59,59,.15);
     opacity:0;pointer-events:none;z-index:1;
   }
-  .tactical-red-pulse.flash{animation:tacticalPulse .62s cubic-bezier(.2,.7,.2,1) 1}
+  .tactical-red-pulse.flash{animation:tacticalPulse 1.15s cubic-bezier(.2,.7,.2,1) 1}
   @keyframes tacticalPulse{
     0%{opacity:0;transform:translate(-50%,-50%) scale(.68)}
     22%{opacity:.95}
     100%{opacity:0;transform:translate(-50%,-50%) scale(1.35)}
   }
-  .avatar-body.acknowledge{animation:tacticalAck .42s cubic-bezier(.22,.85,.24,1) 1 !important}
+  .avatar-body.acknowledge{animation:tacticalAck .78s cubic-bezier(.22,.85,.24,1) 1 !important}
   @keyframes tacticalAck{
     0%{transform:translateX(-50%) translateY(1px) rotate(0deg) scale(1)}
     42%{transform:translateX(-50%) translateY(-6px) rotate(-1.3deg) scale(1.035)}
@@ -465,20 +480,25 @@
     filter:drop-shadow(0 0 6px rgba(255,59,59,.98));
   }
 
-  /* The tactical source art contains its own eye glow.  A small visor-colored
-     mask hides those baked-in bars so the live eyes can blink/look naturally. */
-  .shell.tactical .avatar-body::after{
-    content:"";position:absolute;left:50%;top:31.7%;width:104px;height:18px;
-    transform:translateX(-50%);z-index:3;pointer-events:none;border-radius:50%;
-    background:linear-gradient(180deg,rgba(4,17,38,.98),rgba(3,14,32,.99));
-    box-shadow:inset 0 0 12px rgba(47,140,255,.08);
-  }
+  /* The tactical source art already has the correct visor geometry. Instead of
+     laying one wide dark band across it, mask only the two baked-in eye bars.
+     The live eyes then sit directly on top, preserving the original visor shape. */
+  .shell.tactical .avatar-body::after{content:none}
   .shell.tactical .avatar-eyes{
-    opacity:1;top:32.2%;width:60px;height:14px;gap:13px;z-index:5;
+    opacity:1;top:32.15%;width:58px;height:14px;gap:12px;z-index:5;
     animation:tacticalEyesLook 8.8s ease-in-out infinite;
   }
+  .shell.tactical .avatar-eyes::before,
+  .shell.tactical .avatar-eyes::after{
+    content:"";position:absolute;top:50%;width:25px;height:8px;
+    transform:translateY(-50%);border-radius:999px;z-index:-1;pointer-events:none;
+    background:rgba(5,20,43,.97);
+    box-shadow:0 0 6px rgba(5,20,43,.92);
+  }
+  .shell.tactical .avatar-eyes::before{left:-1px}
+  .shell.tactical .avatar-eyes::after{right:-1px}
   .shell.tactical .avatar-eye{
-    width:20px;height:3.7px;background:var(--tactical-blue);
+    width:19px;height:3.5px;background:var(--tactical-blue);
     box-shadow:0 0 4px rgba(255,255,255,.74),
                0 0 8px rgba(47,140,255,.98),
                0 0 14px rgba(47,140,255,.70);
@@ -1225,12 +1245,13 @@
     avatarBody.classList.add('acknowledge');
     ack.classList.add('show');
 
+    /* Deliberate ~5 second choreography: acknowledge first, then visibly shift. */
     setTimeout(()=>{
       pulse.classList.remove('flash');
       void pulse.offsetWidth;
       pulse.classList.add('flash');
       shell.classList.add('mode-shifting');
-    },190);
+    },650);
 
     setTimeout(()=>{
       if(snapshot){
@@ -1240,20 +1261,20 @@
       state.tacticalMode=nextMode;
       saveState();
       render();
-    },310);
+    },1250);
 
     setTimeout(()=>{
       ack.classList.remove('show');
       banner.classList.add('show');
-    },760);
+    },2850);
 
-    setTimeout(()=>banner.classList.remove('show'),1550);
+    setTimeout(()=>banner.classList.remove('show'),4650);
     setTimeout(()=>{
       avatarBody.classList.remove('acknowledge');
       pulse.classList.remove('flash');
       shell.classList.remove('mode-shifting');
       modeShifting=false;
-    },1800);
+    },5250);
   }
 
   function handleAvatarTap(){
