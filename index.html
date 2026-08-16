@@ -864,10 +864,14 @@
   .meal-more.show{opacity:1;visibility:visible;pointer-events:auto}
   .meal-more:active{transform:scale(.92)}
   .day-meta{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    margin:12px 0 2px;color:#718198;font-size:12px
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    margin:12px 0 3px;color:#64758d;font-size:13.5px;font-weight:500
   }
-  .day-meta .text-link{font-size:12px;padding:2px 3px}
+  .day-meta .text-link{
+    font-size:12.5px;font-weight:580;line-height:1;border:1px solid #e0e8f2;
+    background:#f7faff;color:#1267ff;border-radius:999px;padding:6px 10px;cursor:pointer
+  }
+  .day-meta .text-link:active{transform:scale(.96);background:#f1f6ff}
   .day-progress{
     display:none;text-align:center;color:#91a0b4;font-size:11px;margin:3px 0 8px
   }
@@ -898,7 +902,8 @@
   .occasion-card.skipped .selection-line{color:#a0aaba}
   .occasion-chevron{font-size:20px;color:#a5b1c1;padding:0;align-self:center}
   .shell.tactical .meal-more{color:#8396ad}
-  .shell.tactical .day-meta,.shell.tactical .day-progress{color:#8496ac}
+  .shell.tactical .day-meta,.shell.tactical .day-progress{color:#93a5bb}
+  .shell.tactical .day-meta .text-link{background:#0d2037;border-color:#294f7f;color:#5fa5ff}
   .shell.tactical .remaining-strip{background:transparent;border:0}
   .shell.tactical .remaining-line{color:#899bb1}
   .shell.tactical .remaining-line b{color:#f2f6fb}
@@ -1161,8 +1166,8 @@
 
     <div class="meal-setup" id="mealSetup">
       <div class="meal-kicker">Today</div>
-      <div class="meal-question">How many times do you want to eat today?</div>
-      <div class="meal-helper">AdaptIM will divide your targets for you.</div>
+      <div class="meal-question">How many meals today?</div>
+      <div class="meal-helper">AdaptIM will divide your targets.</div>
       <div class="occasion-count-grid" id="occasionCountGrid">
         <button class="occasion-count" data-count="3">3</button>
         <button class="occasion-count" data-count="4">4</button>
@@ -1757,19 +1762,46 @@
   }
   function resetViewportTop(){
     const screen=$('mealScreen');
-    if(screen) screen.scrollTop=0;
-    document.documentElement.scrollTop=0;
-    document.body.scrollTop=0;
+    const setTop=el=>{
+      if(!el) return;
+      try{el.scrollTop=0;el.scrollLeft=0;}catch(e){}
+      try{el.scrollTo({top:0,left:0,behavior:'auto'});}catch(e){}
+    };
     const force=()=>{
-      if(screen) screen.scrollTop=0;
+      // Reset AdaptIM's own scrollable meal panel first.
+      setTop(screen);
+      setTop(document.scrollingElement);
+      setTop(document.documentElement);
+      setTop(document.body);
       try{window.scrollTo(0,0);}catch(e){}
-      try{window.parent.scrollTo(0,0);}catch(e){}
-      try{window.top.scrollTo(0,0);}catch(e){}
+
+      // Streamlit usually scrolls a parent container rather than the iframe window.
+      // Reset the common Streamlit containers and bring this component itself to the top.
+      try{
+        const p=window.parent;
+        const d=p.document;
+        const candidates=[
+          d.scrollingElement,d.documentElement,d.body,
+          d.querySelector('[data-testid="stAppViewContainer"]'),
+          d.querySelector('[data-testid="stMain"]'),
+          d.querySelector('[data-testid="stMainBlockContainer"]'),
+          d.querySelector('.stApp'),d.querySelector('.main'),d.querySelector('section.main')
+        ];
+        candidates.forEach(setTop);
+        const frame=window.frameElement;
+        if(frame){
+          try{frame.scrollIntoView({block:'start',inline:'nearest',behavior:'auto'});}catch(e){}
+          let node=frame.parentElement;
+          while(node){setTop(node);node=node.parentElement;}
+        }
+        try{p.scrollTo(0,0);}catch(e){}
+      }catch(e){}
     };
     force();
-    requestAnimationFrame(force);
-    setTimeout(force,40);
-    setTimeout(force,140);
+    requestAnimationFrame(()=>{force();requestAnimationFrame(force);});
+    setTimeout(force,60);
+    setTimeout(force,180);
+    setTimeout(force,360);
   }
   function openMealBuilder(){
     ensureDayFresh();closeOverlay();$('mealScreen').classList.add('show');renderMealBuilder();resetViewportTop();
