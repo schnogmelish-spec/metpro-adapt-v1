@@ -890,7 +890,7 @@
     </div>
 
     <div class="adaptive-title">
-      <h2 id="modeHeading">Adaptive Intake</h2>
+      <h2 id="modeHeading">Adaptive Intake Matrix</h2>
       <p id="modeSubline">Targets adjust with you.</p>
     </div>
 
@@ -1375,7 +1375,7 @@
     const active=!!state.tacticalMode;
     shell.classList.toggle('tactical',active);
     document.body.classList.toggle('tactical-page',active);
-    $('modeHeading').textContent=active?'Tactical Mode':'Adaptive Intake';
+    $('modeHeading').textContent=active?'Tactical Mode':'Adaptive Intake Matrix';
     $('modeSubline').textContent=active?'Lock in':'Targets adjust with you.';
   }
 
