@@ -1,11 +1,10 @@
-import base64
 from pathlib import Path
 
 import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(
-    page_title="MetPro Adapt",
+    page_title="AdaptIM",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -52,11 +51,7 @@ st.markdown(
 
 ROOT = Path(__file__).resolve().parent
 html = (ROOT / "index.html").read_text(encoding="utf-8")
-avatar_path = ROOT / "metpro_avatar.png"
-if not avatar_path.exists():
-    avatar_path = ROOT / "assets" / "metpro_avatar.png"
-avatar_bytes = avatar_path.read_bytes()
-avatar_b64 = base64.b64encode(avatar_bytes).decode("ascii")
-html = html.replace("__AVATAR_DATA__", f"data:image/png;base64,{avatar_b64}")
 
+# The current AdaptIM build embeds its normal and Tactical Mode avatar assets
+# directly in index.html, so no separate image injection step is required.
 components.html(html, height=1320, scrolling=False)
