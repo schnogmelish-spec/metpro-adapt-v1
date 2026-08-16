@@ -589,7 +589,7 @@
   /* ---------- OVERLAY / SETTINGS ---------- */
   .overlay{
     position:absolute;inset:0;background:rgba(244,247,251,.72);
-    backdrop-filter:blur(8px);z-index:50;display:none;
+    backdrop-filter:blur(8px);z-index:100;display:none;
     align-items:flex-start;justify-content:center;padding-top:8px;
   }
   .overlay.show{display:flex}
@@ -796,6 +796,7 @@
   .occasion-macros span{font-size:10.5px;color:#6e7d92;white-space:nowrap}
   .occasion-macros b{font-weight:620;color:#1c3557}
   .occasion-chevron{font-size:18px;color:#a1adbd;padding-left:3px}
+  .occasion-action{display:inline-flex;align-items:center;margin-top:7px;border:1px solid #d9e7f8;background:#f4f8ff;color:#1267ff;border-radius:999px;padding:4px 8px;font-size:9.8px;font-weight:620;letter-spacing:.05px}
   .plan-actions{display:flex;justify-content:center;gap:8px;margin:15px 0 3px}
   .plan-actions .secondary{height:40px;border-radius:13px;font-size:12px;padding:0 14px}
   .provider-note{text-align:center;color:#97a3b3;font-size:10px;margin-top:12px;line-height:1.35}
@@ -818,6 +819,7 @@
   .food-chip{border:1px solid #e0e7ef;background:#fff;color:#203957;border-radius:13px;min-height:43px;padding:8px 9px;font-size:12px;text-align:left;cursor:pointer}
   .food-chip.selected{border-color:#8fb7ff;background:#f6f9ff;color:#1267ff;box-shadow:0 0 0 2px rgba(18,103,255,.05)}
   .shell.tactical .selection-line{color:#91a3b8}
+  .shell.tactical .occasion-action{background:#0d2037;border-color:#294f7f;color:#5fa5ff}
   .shell.tactical .food-group-title{color:#8396ad}
   .shell.tactical .food-chip{background:#0b1827;border-color:#293e56;color:#dce6f2}
   .shell.tactical .food-chip.selected{background:#0d2037;border-color:#3b83de;color:#59a1ff;box-shadow:0 0 0 2px rgba(47,140,255,.08)}
@@ -1144,7 +1146,7 @@
       id:'metpro',
       name:'MetPro',
       footer:'▣  MetPro Intelligence  •  Personalized  •  Adaptive',
-      mealNote:'Meal logic supplied by MetPro • AdaptIM occasion engine',
+      mealNote:'Meal logic supplied by MetPro • AdaptIM adaptive meal engine',
       engineVersion:'metpro-adaptive-v1',
       allowedOccasionCounts:[3,4,5,6],
       partitionWeights:{3:[1,1,1],4:[1,1,1,1],5:[1,1,1,1,1],6:[1,1,1,1,1,1]},
@@ -1158,7 +1160,7 @@
     },
     rosc:{
       id:'rosc',name:'Getting ROSC',footer:'▣  Getting ROSC  •  Tactical Nutrition  •  AdaptIM',
-      mealNote:'ROSC full-meal logic • AdaptIM occasion engine',engineVersion:'rosc-external-v1',
+      mealNote:'ROSC full-meal logic • AdaptIM adaptive meal engine',engineVersion:'rosc-external-v1',
       allowedOccasionCounts:[4,5,6],partitionWeights:{4:[1,1,1,1],5:[1,1,1,1,1],6:[1,1,1,1,1,1]},
       lighterFactor:.75,slotMeaning:'full-meal',fullOccasionsOnly:true,requiresExternalTarget:true,foodOptions:null
     }
@@ -1679,26 +1681,27 @@
     $('dayProgress').textContent=`${complete} of ${n} complete`;
     const overParts=Object.entries(remain.over).filter(([,v])=>v>0).map(([k,v])=>`${k[0].toUpperCase()} +${v}g`);
     $('remainingStrip').innerHTML=`
-      <div class="remaining-label"><strong>Remaining</strong><small>${overParts.length?`Over: ${overParts.join(' • ')}`:'Rebalanced across open occasions'}</small></div>
+      <div class="remaining-label"><strong>Remaining</strong><small>${overParts.length?`Over: ${overParts.join(' • ')}`:'Rebalanced across open meals'}</small></div>
       <div class="remain-macro"><b>${Math.round(remain.carbs)}g</b><span>CARBS</span></div>
       <div class="remain-macro"><b>${Math.round(remain.protein)}g</b><span>PROTEIN</span></div>
       <div class="remain-macro"><b>${Math.round(remain.fat)}g</b><span>FATS</span></div>`;
     $('occasionList').innerHTML=state.day.occasions.map(o=>{
       const macro=o.status==='logged' && o.actual ? o.actual : o.planned;
-      const status=o.status==='logged'?'Logged':o.status==='skipped'?'Skipped':`Open • ${o.size==='light'?'lighter':'standard'} target`;
+      const status=o.status==='logged'?'Logged':o.status==='skipped'?'Skipped':`Open • ${o.size==='light'?'lighter':'standard'} meal target`;
       const selected=o.selection ? [o.selection.protein,o.selection.carbs,o.selection.fat].filter(Boolean).join(' • ') : '';
       return `<button class="occasion-card ${o.status}" data-occasion-id="${o.id}">
         <span class="occasion-index">${o.order}</span>
-        <span><span class="occasion-title">Occasion ${o.order}</span><span class="occasion-status">${status}</span>
+        <span><span class="occasion-title">Meal ${o.order}</span><span class="occasion-status">${status}</span>
           <span class="occasion-macros"><span><b>${Math.round(macro?.carbs||0)}g</b> C</span><span><b>${Math.round(macro?.protein||0)}g</b> P</span><span><b>${Math.round(macro?.fat||0)}g</b> F</span></span>
-          <span class="selection-line">${selected||'<em>Tap to choose or swap foods</em>'}</span>
+          <span class="selection-line">${selected||'<em>No foods selected yet</em>'}<span class="occasion-action">${selected?'Change foods':'Choose / Swap Foods'} →</span></span>
         </span><span class="occasion-chevron">›</span></button>`;
     }).join('');
     document.querySelectorAll('[data-occasion-id]').forEach(b=>b.onclick=()=>openOccasion(b.dataset.occasionId));
     saveState();
   }
-  function openMealBuilder(){ ensureDayFresh(); $('mealScreen').classList.add('show'); renderMealBuilder(); }
-  function closeMealBuilder(){ $('mealScreen').classList.remove('show'); }
+  let mealReturnScrollY=0;
+  function openMealBuilder(){ ensureDayFresh(); mealReturnScrollY=window.scrollY||0; closeOverlay(); $('mealScreen').classList.add('show'); renderMealBuilder(); $('mealScreen').scrollTop=0; requestAnimationFrame(()=>{ $('mealScreen').scrollTop=0; window.scrollTo(0,0); }); }
+  function closeMealBuilder(){ closeOverlay(); $('mealScreen').classList.remove('show'); $('mealScreen').scrollTop=0; requestAnimationFrame(()=>window.scrollTo(0,mealReturnScrollY)); }
   function getOccasion(id){ return state.day.occasions.find(o=>o.id===id); }
   function targetCells(m){ return `<div class="occasion-target-box">
     <div class="occasion-target-cell"><b>${Math.round(m.carbs||0)}g</b><span>CARBS</span></div>
@@ -1708,7 +1711,7 @@
     const o=getOccasion(id); if(!o) return;
     if(o.status==='open'){
       const m=o.planned||{carbs:0,protein:0,fat:0};
-      openOverlay(`<h2>Occasion ${o.order}</h2><p class="lead">This target is based on what is still available today. Log it as planned, enter what you actually ate, or skip it and AdaptIM will redivide what remains.</p>${targetCells(m)}<div class="macro-log-grid"><label>Carbs (g)<input id="actualCarbs" class="text-input" type="number" min="0" inputmode="decimal" value="${m.carbs}"></label><label>Protein (g)<input id="actualProtein" class="text-input" type="number" min="0" inputmode="decimal" value="${m.protein}"></label><label>Fat (g)<input id="actualFat" class="text-input" type="number" min="0" inputmode="decimal" value="${m.fat}"></label></div><div class="sheet-stack"><button class="secondary" id="swapFoods">Swap foods</button><button class="secondary" id="toggleLighter">${o.size==='light'?'Return to standard':'Make this occasion lighter'}</button><button class="primary" id="logPlanned">Log as planned</button><button class="secondary" id="logActual">Log entered amounts</button><button class="danger-lite" id="skipOccasion">Skip this occasion</button></div>`);
+      openOverlay(`<h2>Meal ${o.order}</h2><p class="lead">This target is based on what is still available today. Choose your foods, log it as planned, enter what you actually ate, or skip it and AdaptIM will redivide what remains.</p>${targetCells(m)}<div class="macro-log-grid"><label>Carbs (g)<input id="actualCarbs" class="text-input" type="number" min="0" inputmode="decimal" value="${m.carbs}"></label><label>Protein (g)<input id="actualProtein" class="text-input" type="number" min="0" inputmode="decimal" value="${m.protein}"></label><label>Fat (g)<input id="actualFat" class="text-input" type="number" min="0" inputmode="decimal" value="${m.fat}"></label></div><div class="sheet-stack"><button class="primary" id="swapFoods">Choose / Swap Foods</button><button class="secondary" id="toggleLighter">${o.size==='light'?'Return to standard':'Make this meal lighter'}</button><button class="secondary" id="logPlanned">Log as planned</button><button class="secondary" id="logActual">Log entered amounts</button><button class="danger-lite" id="skipOccasion">Skip this meal</button></div>`);
       $('swapFoods').onclick=()=>openFoodSwap(o.id);
       $('toggleLighter').onclick=()=>toggleOccasionSize(o.id);
       $('logPlanned').onclick=()=>commitOccasion(o.id,m);
@@ -1716,7 +1719,7 @@
       $('skipOccasion').onclick=()=>skipOccasion(o.id);
     }else{
       const m=o.actual||{carbs:0,protein:0,fat:0};
-      openOverlay(`<h2>Occasion ${o.order}</h2><p class="lead">${o.status==='logged'?'Logged amounts':'This occasion was skipped.'}</p>${o.status==='logged'?targetCells(m):''}<div class="sheet-stack"><button class="secondary" id="reopenOccasion">Reopen occasion</button></div>`);
+      openOverlay(`<h2>Meal ${o.order}</h2><p class="lead">${o.status==='logged'?'Logged amounts':'This meal was skipped.'}</p>${o.status==='logged'?targetCells(m):''}<div class="sheet-stack"><button class="secondary" id="reopenOccasion">Reopen meal</button></div>`);
       $('reopenOccasion').onclick=()=>reopenOccasion(o.id);
     }
   }
@@ -1726,7 +1729,7 @@
     const options=provider.foodOptions || {protein:[],carbs:[],fat:[]};
     const draft={...(o.selection||{})};
     const group=(key,title)=>`<div class="food-group"><div class="food-group-title">${title}</div><div class="food-choice-grid">${(options[key]||[]).map(item=>`<button class="food-chip ${draft[key]===item?'selected':''}" data-food-key="${key}" data-food-value="${item}">${item}</button>`).join('')}</div></div>`;
-    openOverlay(`<h2>Swap Foods</h2><p class="lead">Choose the foods you want for Occasion ${o.order}. AdaptIM keeps the macro target intact; provider portion logic can plug into these choices later.</p>${group('protein','Protein')}${group('carbs','Carbohydrate')}${group('fat','Fat')}<div class="sheet-actions"><button class="secondary" id="cancelFoodSwap">Cancel</button><button class="primary" id="saveFoodSwap">Use these foods</button></div>`);
+    openOverlay(`<h2>Choose / Swap Foods</h2><p class="lead">Choose the foods you want for Meal ${o.order}. AdaptIM keeps the macro target intact while the provider supplies the food logic.</p>${group('protein','Protein')}${group('carbs','Carbohydrate')}${group('fat','Fat')}<div class="sheet-actions"><button class="secondary" id="cancelFoodSwap">Cancel</button><button class="primary" id="saveFoodSwap">Use these foods</button></div>`);
     document.querySelectorAll('[data-food-key]').forEach(b=>b.onclick=()=>{
       draft[b.dataset.foodKey]=b.dataset.foodValue;
       document.querySelectorAll(`[data-food-key="${b.dataset.foodKey}"]`).forEach(x=>x.classList.toggle('selected',x===b));
@@ -1742,11 +1745,11 @@
   function commitOccasion(id,actual){
     const o=getOccasion(id); if(!o) return;
     o.status='logged';o.actual={carbs:Math.round(actual.carbs),protein:Math.round(actual.protein),fat:Math.round(actual.fat)};
-    recalculateOccasionPlans();saveState();closeOverlay();renderMealBuilder();toast('Occasion logged');
+    recalculateOccasionPlans();saveState();closeOverlay();renderMealBuilder();toast('Meal logged');
   }
   function skipOccasion(id){
     const o=getOccasion(id); if(!o) return;
-    o.status='skipped';o.actual=null;recalculateOccasionPlans();saveState();closeOverlay();renderMealBuilder();toast('Remaining targets rebalanced');
+    o.status='skipped';o.actual=null;recalculateOccasionPlans();saveState();closeOverlay();renderMealBuilder();toast('Remaining meals rebalanced');
   }
   function reopenOccasion(id){
     const o=getOccasion(id); if(!o) return;
@@ -1816,7 +1819,7 @@
   };
 
 
-  function openOverlay(content){ $('sheet').innerHTML=`<div class="grabber"></div>${content}`; $('overlay').classList.add('show'); }
+  function openOverlay(content){ $('sheet').innerHTML=`<div class="grabber"></div>${content}`; $('overlay').classList.add('show'); $('sheet').scrollTop=0; }
   function closeOverlay(){ $('overlay').classList.remove('show'); }
   $('overlay').addEventListener('click',e=>{if(e.target===$('overlay')) closeOverlay();});
 
@@ -1874,7 +1877,7 @@
   $('profileBack').onclick=closeProfile; $('miniProfile').onclick=openProfile; $('completeProfilePill').onclick=openProfile;
   $('buildMeals').onclick=openMealBuilder; $('mealBack').onclick=closeMealBuilder;
   document.querySelectorAll('.occasion-count').forEach(b=>b.onclick=()=>setOccasionCount(Number(b.dataset.count)));
-  $('changeOccasions').onclick=()=>{state.day=freshDay();saveState();renderMealBuilder();};
+  $('changeOccasions').onclick=()=>{state.day=freshDay();saveState();renderMealBuilder();$('mealScreen').scrollTop=0;};
   $('resetDay').onclick=resetMealDay;
   $('avatar').onclick=handleAvatarTap;
   $('profileSex').onchange=()=>setProfileAvatarPreview($('profileSex').value);
