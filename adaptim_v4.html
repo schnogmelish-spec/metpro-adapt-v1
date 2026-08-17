@@ -2379,6 +2379,54 @@
     margin-top:2px !important;
   }
 
+
+  /* ---------- FOOD LIBRARY SCROLL FIX ---------- */
+  .shell.food-library-open{
+    overflow:visible !important;
+  }
+  .food-library-screen.show{
+    position:fixed !important;
+    top:0 !important;
+    left:50% !important;
+    right:auto !important;
+    bottom:auto !important;
+    transform:translateX(-50%) !important;
+    width:min(100vw,470px) !important;
+    height:100vh !important;
+    height:100dvh !important;
+    max-height:100dvh !important;
+    overflow-y:scroll !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y;
+    padding-bottom:calc(110px + env(safe-area-inset-bottom)) !important;
+  }
+  .food-library-list{
+    padding-bottom:24px;
+  }
+  .food-library-screen.show::after{
+    content:"";
+    display:block;
+    height:72px;
+    width:1px;
+  }
+
+  @media(min-width:560px){
+    .food-library-screen.show{
+      top:18px !important;
+      height:calc(100dvh - 42px) !important;
+      max-height:calc(100dvh - 42px) !important;
+      border-radius:42px;
+      border:1px solid #edf1f6;
+      box-shadow:0 24px 76px rgba(20,43,76,.10);
+    }
+    .shell.tactical .food-library-screen.show{
+      border-color:#263a51;
+      box-shadow:0 24px 76px rgba(0,0,0,.28);
+    }
+  }
+
 </style>
 
 </head>
@@ -3692,13 +3740,16 @@
     document.querySelectorAll('[data-food-filter]').forEach(b=>b.classList.toggle('active',b.dataset.foodFilter==='all'));
     if($('foodLibrarySearch')) $('foodLibrarySearch').value='';
     $('profileScreen').classList.remove('show');
+    $('appShell').classList.add('food-library-open');
     $('foodLibraryScreen').classList.add('show');
     renderFoodLibrary();
+    $('foodLibraryScreen').scrollTop=0;
     resetViewportTop();
   }
   function closeFoodLibrary(){
     hideFoodInfo();
     $('foodLibraryScreen').classList.remove('show');
+    $('appShell').classList.remove('food-library-open');
     $('profileScreen').classList.add('show');
     resetViewportTop();
   }
@@ -4423,6 +4474,7 @@
   function closeProfile(){
     hideFoodInfo();
     $('foodLibraryScreen').classList.remove('show');
+    $('appShell').classList.remove('food-library-open');
     $('profileScreen').classList.remove('show');
   }
   $('openFoodLibrary').onclick=openFoodLibrary;
