@@ -1737,60 +1737,6 @@
   }
   .shell.tactical .badge-thinking{opacity:1}
 
-
-  /* ---------- TACTICAL AVATAR REFINEMENT: CHEST PLUS ONLY ---------- */
-  .shell.tactical .tactical-kit{
-    display:block;
-    position:absolute;
-    inset:0;
-    z-index:7;
-    pointer-events:none;
-  }
-
-  /* Hide prior strap / baton / pack if any stale CSS remains. */
-  .shell.tactical .tactical-strap,
-  .shell.tactical .tactical-buckle,
-  .shell.tactical .tactical-pack,
-  .shell.tactical .tactical-pack-seam{
-    display:none !important;
-  }
-
-  /* Small blue metal plate with red medical cross centered on chest. */
-  .shell.tactical .tactical-chest-badge{
-    position:absolute;
-    left:50%;
-    top:65.8%;
-    width:15px;
-    height:15px;
-    transform:translate(-50%,-50%) rotate(30deg);
-    border-radius:3px;
-    background:linear-gradient(145deg,#d9e6ff 0%, #9fbbec 36%, #5e83c6 68%, #355796 100%);
-    border:1px solid rgba(255,255,255,.58);
-    box-shadow:
-      0 0 0 1px rgba(9,18,31,.26),
-      0 1px 2px rgba(0,0,0,.22),
-      0 0 8px rgba(47,140,255,.16);
-  }
-  .shell.tactical .tactical-chest-badge::before,
-  .shell.tactical .tactical-chest-badge::after{
-    content:"";
-    position:absolute;
-    left:50%;
-    top:50%;
-    background:#cf2d2d;
-    transform:translate(-50%,-50%);
-    border-radius:1px;
-    box-shadow:0 0 2px rgba(198,40,40,.25);
-  }
-  .shell.tactical .tactical-chest-badge::before{
-    width:4px;
-    height:10px;
-  }
-  .shell.tactical .tactical-chest-badge::after{
-    width:10px;
-    height:4px;
-  }
-
 </style>
 
 </head>
@@ -1823,9 +1769,11 @@
           </div>
           <div class="badge-thinking" aria-hidden="true"></div>
           <div class="tactical-kit" aria-hidden="true">
-            <div class="tactical-chest-badge"></div>
-          </div>
-        </div>
+            <div class="tactical-strap"></div>
+            <div class="tactical-buckle"></div>
+            <div class="tactical-pack">
+              <div class="tactical-pack-seam"></div>
+            </div>
           </div>
         </div>
         <svg class="genome-svg-front" viewBox="0 0 275 175" aria-hidden="true">
