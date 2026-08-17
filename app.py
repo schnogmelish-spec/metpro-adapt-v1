@@ -3,6 +3,8 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
+BUILD_ID = "double-food-v2"
+
 st.set_page_config(
     page_title="AdaptIM",
     page_icon="⚡",
@@ -50,5 +52,9 @@ st.markdown(
 )
 
 ROOT = Path(__file__).resolve().parent
-html = (ROOT / "adaptim.html").read_text(encoding="utf-8")
+
+# This build intentionally uses a new HTML filename so a GitHub commit
+# necessarily changes both the Python entry point and the loaded UI file.
+html = (ROOT / "adaptim_v2.html").read_text(encoding="utf-8")
+
 components.html(html, height=1320, scrolling=False)
