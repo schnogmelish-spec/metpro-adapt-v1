@@ -1954,6 +1954,63 @@
     opacity:0 !important;
   }
 
+
+
+  /* ---------- TACTICAL LOCK-IN RHYTHM ---------- */
+  .adaptive-title{position:relative}
+  #modeSubline{position:relative;z-index:2}
+  .lockin-rhythm{
+    width:min(132%, 720px);
+    height:18px;
+    margin:-8px auto 8px;
+    position:relative;
+    left:50%;transform:translateX(-50%);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .45s ease;
+    z-index:1;
+  }
+  .lockin-rhythm::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;top:50%;height:1px;
+    transform:translateY(-50%);
+    background:linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,64,64,0) 6%,
+      rgba(255,84,84,.18) 18%,
+      rgba(255,84,84,.26) 50%,
+      rgba(255,84,84,.18) 82%,
+      rgba(255,64,64,0) 94%,
+      transparent 100%);
+    box-shadow:0 0 8px rgba(255,66,66,.14);
+  }
+  .lockin-rhythm::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(90deg,
+      rgba(255,76,76,0) 0%,
+      rgba(255,76,76,.18) 18%,
+      rgba(255,76,76,.95) 50%,
+      rgba(255,76,76,.18) 82%,
+      rgba(255,76,76,0) 100%);
+    background-size:200% 100%;
+    background-position:120% 50%;
+    -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 70' preserveAspectRatio='none'><polyline points='0,35 265,35 310,35 328,20 346,50 366,13 387,57 418,35 1200,35' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/100% 100% no-repeat;
+            mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 70' preserveAspectRatio='none'><polyline points='0,35 265,35 310,35 328,20 346,50 366,13 387,57 418,35 1200,35' fill='none' stroke='black' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/100% 100% no-repeat;
+    filter:drop-shadow(0 0 5px rgba(255,76,76,.38)) drop-shadow(0 0 14px rgba(255,76,76,.16));
+    animation:lockInRhythmSweep 3.8s linear infinite, lockInRhythmPulse 1.7s ease-in-out infinite;
+  }
+  @keyframes lockInRhythmSweep{
+    0%{background-position:125% 50%}
+    100%{background-position:-25% 50%}
+  }
+  @keyframes lockInRhythmPulse{
+    0%,100%{opacity:.68;transform:scaleY(1)}
+    50%{opacity:1;transform:scaleY(1.03)}
+  }
+  .shell.tactical .lockin-rhythm{opacity:1}
+
 </style>
 
 </head>
@@ -2004,6 +2061,7 @@
     <div class="adaptive-title">
       <h2 id="modeHeading">Adaptive Intake Matrix</h2>
       <p id="modeSubline">Targets adjust with you.</p>
+      <div class="lockin-rhythm" aria-hidden="true"></div>
     </div>
 
 
