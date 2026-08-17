@@ -50,8 +50,5 @@ st.markdown(
 )
 
 ROOT = Path(__file__).resolve().parent
-html = (ROOT / "index.html").read_text(encoding="utf-8")
-
-# The current AdaptIM build embeds its normal and Tactical Mode avatar assets
-# directly in index.html, so no separate image injection step is required.
+html = (ROOT / "adaptim.html").read_text(encoding="utf-8")
 components.html(html, height=1320, scrolling=False)
