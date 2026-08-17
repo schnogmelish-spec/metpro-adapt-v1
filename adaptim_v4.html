@@ -1895,6 +1895,56 @@
     stroke-width:1.85 !important;
   }
 
+
+  /* ---------- FINAL TACTICAL AVATAR TWEAK — CSS ONLY ---------- */
+
+  /* Slightly larger, more readable red cross; chest plate size stays the same. */
+  .shell.tactical .badge-thinking::before{
+    width:3.5px !important;
+    height:9.2px !important;
+    background:#df3434 !important;
+    box-shadow:0 0 2px rgba(223,52,52,.38) !important;
+  }
+  .shell.tactical .badge-thinking::after{
+    width:9.2px !important;
+    height:3.5px !important;
+    background:#df3434 !important;
+    box-shadow:0 0 2px rgba(223,52,52,.38) !important;
+  }
+
+  /* Dial back the chrome treatment slightly so it reads closer to the normal avatar. */
+  .shell.tactical .avatar{
+    filter:
+      brightness(1.032)
+      contrast(1.072)
+      saturate(.80)
+      drop-shadow(0 1px 1px rgba(248,251,255,.40))
+      drop-shadow(0 8px 14px rgba(0,0,0,.24))
+      drop-shadow(0 0 9px rgba(47,140,255,.32)) !important;
+  }
+
+  /* Clean up stray lower-right metallic wisps while keeping subtle shell glints. */
+  .shell.tactical .avatar-body::after{
+    left:14% !important;
+    right:14% !important;
+    top:50% !important;
+    bottom:7% !important;
+    opacity:.34 !important;
+    background:
+      linear-gradient(118deg,
+        transparent 0 45%,
+        rgba(245,249,255,.00) 46%,
+        rgba(245,249,255,.40) 48%,
+        rgba(151,184,226,.16) 49.5%,
+        transparent 52% 100%) left bottom / 52% 100% no-repeat,
+      linear-gradient(62deg,
+        transparent 0 45%,
+        rgba(245,249,255,.00) 46%,
+        rgba(245,249,255,.40) 48%,
+        rgba(151,184,226,.16) 49.5%,
+        transparent 52% 100%) right bottom / 52% 100% no-repeat !important;
+  }
+
 </style>
 
 </head>
