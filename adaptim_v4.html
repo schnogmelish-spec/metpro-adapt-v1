@@ -1144,6 +1144,297 @@
   .shell.tactical .food-card .food-card-name{color:#dce6f2}
   .shell.tactical .food-cancel-link{color:#7e91a8}
 
+
+
+  /* ==========================================================
+     ADAPTIM TACTICAL — ROSC-INSPIRED SLATE / BLACK SKIN
+     Visual-only override. No nutrition, meal-builder, profile,
+     intake-level, API, or navigation logic is changed here.
+     ========================================================== */
+  body.tactical-page{background:#080A0C !important}
+
+  .shell.tactical{
+    --tactical-blue:#2F8CFF;
+    --tactical-red:#C62828;
+    --tactical-amber:#C58A35;
+    --tactical-black:#090B0D;
+    --tactical-slate:#151A20;
+    --tactical-slate-2:#1B222A;
+    --tactical-slate-3:#242C35;
+    --tactical-border:#303A45;
+    --tactical-text:#F5F7FA;
+    --tactical-muted:#98A3AF;
+    background:
+      radial-gradient(circle at 50% 12%,rgba(47,140,255,.13),transparent 27%),
+      radial-gradient(circle at 16% 56%,rgba(198,40,40,.055),transparent 24%),
+      linear-gradient(180deg,#090B0D 0%,#11161B 48%,#0B0E11 100%) !important;
+    color:var(--tactical-text) !important;
+    border-color:#242B33 !important;
+    box-shadow:0 24px 82px rgba(0,0,0,.48),0 0 36px rgba(47,140,255,.045) !important;
+  }
+
+  .shell.tactical .brand{
+    color:#F5F7FA !important;
+    text-shadow:0 0 18px rgba(47,140,255,.08) !important;
+  }
+  .shell.tactical .mini-profile{
+    background:rgba(19,24,29,.96) !important;
+    border-color:#343E48 !important;
+    color:#D8DEE6 !important;
+    box-shadow:0 8px 22px rgba(0,0,0,.24) !important;
+  }
+
+  .shell.tactical .avatar-aura{
+    background:radial-gradient(circle,rgba(47,140,255,.22) 0%,rgba(47,140,255,.085) 37%,rgba(198,40,40,.028) 59%,rgba(9,11,13,0) 76%) !important;
+  }
+  .shell.tactical .genome-svg,
+  .shell.tactical .genome-svg-front{
+    filter:drop-shadow(0 0 7px rgba(47,140,255,.74)) !important;
+  }
+  .shell.tactical .genome-dot.d2{
+    fill:var(--tactical-red) !important;
+    filter:drop-shadow(0 0 7px rgba(198,40,40,.95)) !important;
+  }
+  .shell.tactical .avatar{
+    filter:brightness(.93) contrast(1.08) saturate(.96)
+      drop-shadow(0 10px 18px rgba(0,0,0,.38))
+      drop-shadow(0 0 11px rgba(47,140,255,.46)) !important;
+  }
+  @keyframes tacticalShellGlow{
+    0%,100%{filter:brightness(.93) contrast(1.08) saturate(.96) drop-shadow(0 10px 18px rgba(0,0,0,.38)) drop-shadow(0 0 9px rgba(47,140,255,.40))}
+    50%{filter:brightness(.95) contrast(1.10) saturate(1) drop-shadow(0 10px 18px rgba(0,0,0,.38)) drop-shadow(0 0 15px rgba(47,140,255,.62))}
+  }
+  .shell.tactical .avatar-eyes::before,
+  .shell.tactical .avatar-eyes::after{
+    background:rgba(5,10,16,.975) !important;
+    box-shadow:0 0 6px rgba(5,10,16,.94) !important;
+  }
+
+  .shell.tactical .adaptive-title h2{
+    color:#F5F7FA !important;
+    text-shadow:0 0 16px rgba(47,140,255,.07) !important;
+  }
+  .shell.tactical .adaptive-title p,
+  .shell.tactical .phase-caption .desc,
+  .shell.tactical .status-label,
+  .shell.tactical .eyebrow,
+  .shell.tactical .summary-label,
+  .shell.tactical .summary-sub,
+  .shell.tactical .sheet p.lead,
+  .shell.tactical .profile-intro,
+  .shell.tactical .meal-helper,
+  .shell.tactical .meal-kicker,
+  .shell.tactical .plan-head small,
+  .shell.tactical .day-meta,
+  .shell.tactical .day-progress,
+  .shell.tactical .occasion-status,
+  .shell.tactical .occasion-macros span,
+  .shell.tactical .remaining-label small,
+  .shell.tactical .occasion-target-cell span,
+  .shell.tactical .meal-detail-lead,
+  .shell.tactical .food-builder-lead{
+    color:#98A3AF !important;
+  }
+
+  .shell.tactical .status-card,
+  .shell.tactical .macro-card,
+  .shell.tactical .summary,
+  .shell.tactical .profile-card,
+  .shell.tactical .choice,
+  .shell.tactical .meal-entry,
+  .shell.tactical .occasion-count,
+  .shell.tactical .remaining-strip,
+  .shell.tactical .occasion-card,
+  .shell.tactical .occasion-target-cell,
+  .shell.tactical .meal-fit-card,
+  .shell.tactical .meal-detail .occasion-target-cell,
+  .shell.tactical .meal-food-action,
+  .shell.tactical .food-select-row,
+  .shell.tactical .food-card{
+    background:linear-gradient(180deg,rgba(27,34,42,.98),rgba(20,26,32,.98)) !important;
+    border-color:#303A45 !important;
+    box-shadow:0 9px 24px rgba(0,0,0,.26) !important;
+  }
+
+  .shell.tactical .status-icon-well,
+  .shell.tactical .macro-icon,
+  .shell.tactical .summary-icon,
+  .shell.tactical .occasion-index,
+  .shell.tactical .food-visual,
+  .shell.tactical .food-swap-btn,
+  .shell.tactical .macro-adjust button,
+  .shell.tactical .back-btn{
+    background:#11161B !important;
+    border-color:#35404B !important;
+    color:#DCE2E9 !important;
+  }
+
+  .shell.tactical .phase-track{
+    background:#0B0E11 !important;
+    border-color:#343E48 !important;
+    box-shadow:inset 0 0 18px rgba(0,0,0,.34) !important;
+  }
+  .shell.tactical .phase-btn{color:#C8D0D9 !important}
+  .shell.tactical .phase-btn.active{
+    background:#171D23 !important;
+    color:var(--tactical-blue) !important;
+    border-color:rgba(47,140,255,.78) !important;
+    box-shadow:0 0 0 1px rgba(47,140,255,.20),0 0 19px rgba(47,140,255,.42),0 8px 22px rgba(0,0,0,.36) !important;
+    text-shadow:0 0 11px rgba(47,140,255,.46) !important;
+  }
+  .shell.tactical .phase-btn.locked{color:#555F69 !important}
+  .shell.tactical .phase-caption .name,
+  .shell.tactical .status-value{color:var(--tactical-blue) !important}
+  .shell.tactical .protection,
+  .shell.tactical .safety-box{
+    background:#141A20 !important;
+    border-color:#343E48 !important;
+    color:#9EA9B4 !important;
+  }
+
+  .shell.tactical .macro-grams,
+  .shell.tactical .summary-value,
+  .shell.tactical .occasion-title,
+  .shell.tactical .remain-macro b,
+  .shell.tactical .occasion-macros b,
+  .shell.tactical .occasion-target-cell b,
+  .shell.tactical .meal-fit-main b,
+  .shell.tactical .meal-food-action strong,
+  .shell.tactical .food-select-name{
+    color:#F5F7FA !important;
+  }
+  .shell.tactical .macro-step{color:#89949F !important}
+  .shell.tactical .macro-bar{background:#363E47 !important}
+  .shell.tactical .macro-dot{background:#0B0E11 !important}
+  .shell.tactical .carbs{color:var(--tactical-red) !important}
+  .shell.tactical .protein{color:var(--tactical-blue) !important}
+  .shell.tactical .fat{color:var(--tactical-amber) !important}
+  .shell.tactical .carbs .macro-icon,
+  .shell.tactical .carbs .macro-adjust button{
+    box-shadow:0 0 14px rgba(198,40,40,.12) !important;
+  }
+  .shell.tactical .protein .macro-icon,
+  .shell.tactical .protein .macro-adjust button{
+    box-shadow:0 0 14px rgba(47,140,255,.13) !important;
+  }
+
+  .shell.tactical .summary-item,
+  .shell.tactical .summary-link,
+  .shell.tactical .meal-adjust-panel,
+  .shell.tactical .food-carousel-wrap,
+  .shell.tactical .food-item-line + .food-item-line{
+    border-color:#2A323B !important;
+  }
+  .shell.tactical .summary-link:hover,
+  .shell.tactical .summary-link:active,
+  .shell.tactical .meal-quiet-btn:active,
+  .shell.tactical .food-remove-btn:active{
+    background:#1C232A !important;
+  }
+
+  .shell.tactical .overlay{background:rgba(0,0,0,.72) !important}
+  .shell.tactical .sheet,
+  .shell.tactical .profile-screen,
+  .shell.tactical .meal-screen{
+    background:#0E1216 !important;
+    color:#F5F7FA !important;
+  }
+  .shell.tactical .grabber{background:#4A545F !important}
+  .shell.tactical .text-input,
+  .shell.tactical .select-input,
+  .shell.tactical .meal-adjust-panel .text-input{
+    background:#11161B !important;
+    border-color:#35404B !important;
+    color:#F5F7FA !important;
+  }
+  .shell.tactical .choice.selected,
+  .shell.tactical .occasion-count.selected,
+  .shell.tactical .food-card.selected{
+    background:#172231 !important;
+    border-color:#2F8CFF !important;
+    color:#65A9FF !important;
+    box-shadow:0 0 0 2px rgba(47,140,255,.09) !important;
+  }
+  .shell.tactical .secondary{
+    background:#242C35 !important;
+    color:#C6CFD8 !important;
+  }
+  .shell.tactical .primary,
+  .shell.tactical .profile-save,
+  .shell.tactical .meal-primary-action{
+    background:#2F8CFF !important;
+    box-shadow:0 8px 22px rgba(47,140,255,.22) !important;
+  }
+  .shell.tactical .toast{
+    background:#1B222A !important;
+    border-color:#394550 !important;
+    box-shadow:0 12px 32px rgba(0,0,0,.40) !important;
+  }
+
+  .shell.tactical .complete-profile-pill{
+    background:#171D23 !important;
+    border-color:#35404B !important;
+    color:#C8D1DA !important;
+  }
+  .shell.tactical .meal-entry-arrow,
+  .shell.tactical .meal-food-action .meal-action-arrow,
+  .shell.tactical .occasion-action,
+  .shell.tactical .day-meta .text-link{
+    background:#172231 !important;
+    border-color:#285789 !important;
+    color:#63A8FF !important;
+  }
+  .shell.tactical .text-link,
+  .shell.tactical .food-add-btn{
+    color:#63A8FF !important;
+  }
+  .shell.tactical .provider-note,
+  .shell.tactical .footer-lock,
+  .shell.tactical .selection-line,
+  .shell.tactical .food-group-title,
+  .shell.tactical .food-balance-meta,
+  .shell.tactical .food-balance-note,
+  .shell.tactical .food-select-portion,
+  .shell.tactical .meal-fit-target,
+  .shell.tactical .food-fit-note,
+  .shell.tactical .meal-food-action small,
+  .shell.tactical .food-select-label,
+  .shell.tactical .meal-quiet-btn,
+  .shell.tactical .food-cancel-link,
+  .shell.tactical .food-remove-btn{
+    color:#87939F !important;
+  }
+
+  .shell.tactical .food-balance-slider::-webkit-slider-runnable-track{background:#3A444E !important}
+  .shell.tactical .food-balance-slider::-webkit-slider-thumb{
+    background:#11161B !important;
+    border-color:#2F8CFF !important;
+    box-shadow:0 2px 9px rgba(47,140,255,.28) !important;
+  }
+  .shell.tactical .food-balance-slider::-moz-range-track{background:#3A444E !important}
+  .shell.tactical .food-balance-slider::-moz-range-thumb{
+    background:#11161B !important;
+    border-color:#2F8CFF !important;
+    box-shadow:0 2px 9px rgba(47,140,255,.28) !important;
+  }
+
+  /* ROSC-style red is a controlled signal, not a second primary UI color. */
+  .shell.tactical .mode-ack{
+    background:rgba(15,19,23,.96) !important;
+    border-color:rgba(47,140,255,.54) !important;
+    color:#EEF4FA !important;
+  }
+  .shell.tactical .mode-shift-banner{
+    background:rgba(15,19,23,.97) !important;
+    border-color:rgba(198,40,40,.66) !important;
+    box-shadow:0 0 22px rgba(198,40,40,.18),0 0 16px rgba(47,140,255,.12) !important;
+    color:#F7F8FA !important;
+  }
+  .tactical-red-pulse{
+    border-color:rgba(198,40,40,.92) !important;
+    box-shadow:0 0 15px rgba(198,40,40,.52),inset 0 0 12px rgba(198,40,40,.18) !important;
+  }
+
 </style>
 
 </head>
