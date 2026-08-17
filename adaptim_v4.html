@@ -1794,6 +1794,107 @@
     transform:translate(-50%,-50%) rotate(-30deg) !important;
   }
 
+
+  /* ---------- TACTICAL AVATAR REFINEMENT — CSS ONLY ---------- */
+
+  /* 1) Smaller, darker, more integrated chest plate. */
+  .shell.tactical .badge-thinking{
+    width:12px !important;
+    height:12px !important;
+    top:65.7% !important;
+    border-radius:3px !important;
+    border:1px solid rgba(47,140,255,.72) !important;
+    background:
+      linear-gradient(145deg,
+        #33475d 0%,
+        #1c2b3b 38%,
+        #101b27 72%,
+        #09121c 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(235,244,255,.18) inset,
+      0 1px 2px rgba(0,0,0,.38),
+      0 0 5px rgba(47,140,255,.26) !important;
+  }
+
+  .shell.tactical .badge-thinking::before{
+    width:3px !important;
+    height:8px !important;
+    background:#d62f2f !important;
+    box-shadow:0 0 2px rgba(214,47,47,.34) !important;
+  }
+
+  .shell.tactical .badge-thinking::after{
+    width:8px !important;
+    height:3px !important;
+    background:#d62f2f !important;
+    box-shadow:0 0 2px rgba(214,47,47,.34) !important;
+  }
+
+  /* 2) Same avatar, but return a little silver/white metal to the shell. */
+  .shell.tactical .avatar{
+    filter:
+      brightness(1.055)
+      contrast(1.09)
+      saturate(.78)
+      drop-shadow(0 1px 1px rgba(248,251,255,.50))
+      drop-shadow(0 8px 14px rgba(0,0,0,.24))
+      drop-shadow(0 0 9px rgba(47,140,255,.34)) !important;
+  }
+
+  /* Fine silver glints along the lower shell edges — no new artwork. */
+  .shell.tactical .avatar-body::after{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:11% !important;
+    right:11% !important;
+    top:47% !important;
+    bottom:2% !important;
+    z-index:5 !important;
+    pointer-events:none !important;
+    background:
+      linear-gradient(118deg,
+        transparent 0 42%,
+        rgba(245,249,255,.00) 43%,
+        rgba(245,249,255,.52) 46%,
+        rgba(151,184,226,.22) 48%,
+        transparent 51% 100%) left bottom / 56% 100% no-repeat,
+      linear-gradient(62deg,
+        transparent 0 42%,
+        rgba(245,249,255,.00) 43%,
+        rgba(245,249,255,.52) 46%,
+        rgba(151,184,226,.22) 48%,
+        transparent 51% 100%) right bottom / 56% 100% no-repeat !important;
+    opacity:.48 !important;
+    mix-blend-mode:screen;
+  }
+
+  /* 3) Very faint machined rim around the visor, without brightening the eyes. */
+  .shell.tactical .visor-sheen{
+    border:1px solid rgba(134,181,239,.17) !important;
+    box-shadow:
+      0 0 0 1px rgba(235,244,255,.035) inset,
+      0 0 8px rgba(47,140,255,.08) !important;
+  }
+
+  /* 4) Stronger orbital depth: back pass recedes, lower/front pass comes forward. */
+  .shell.tactical .genome-svg{
+    opacity:.68 !important;
+    filter:drop-shadow(0 0 5px rgba(47,140,255,.44)) !important;
+  }
+  .shell.tactical .orbit-main{
+    opacity:.76 !important;
+    stroke-width:1.6 !important;
+  }
+  .shell.tactical .genome-svg-front{
+    opacity:1 !important;
+    filter:drop-shadow(0 0 8px rgba(47,140,255,.76)) !important;
+  }
+  .shell.tactical .orbit-front{
+    opacity:1 !important;
+    stroke-width:1.85 !important;
+  }
+
 </style>
 
 </head>
