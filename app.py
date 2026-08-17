@@ -3,7 +3,7 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
-BUILD_ID = "double-food-v2"
+BUILD_ID = "food-balance-v3"
 
 st.set_page_config(
     page_title="AdaptIM",
@@ -53,8 +53,7 @@ st.markdown(
 
 ROOT = Path(__file__).resolve().parent
 
-# This build intentionally uses a new HTML filename so a GitHub commit
-# necessarily changes both the Python entry point and the loaded UI file.
-html = (ROOT / "adaptim_v2.html").read_text(encoding="utf-8")
+# Unique filename intentionally forces this UI build to deploy.
+html = (ROOT / "adaptim_v3.html").read_text(encoding="utf-8")
 
 components.html(html, height=1320, scrolling=False)
