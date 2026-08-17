@@ -2397,7 +2397,7 @@
       slotMeaning:'provider-defined',
       foodOptions:{
         protein:['Chicken breast','Turkey breast','Lean beef','Steak','Salmon','White fish','Shrimp','Tuna','Greek yogurt','Cottage cheese','Eggs','Egg whites','Tofu','Tempeh','Protein shake'],
-        carbs:['Rice','Oats','Potato','Sweet potato','Bread','Wrap / tortilla','Pasta','Quinoa','Cereal','Beans','Lentils','Fruit'],
+        carbs:['Rice','Oats','Potato','Sweet potato','Bread / wraps','Pasta','Quinoa','Cereal','Beans','Lentils','Fruit'],
         fat:['Avocado','Olive oil','Almonds','Walnuts','Peanuts','Nut butter','Seeds','Cheese','Olives','Hummus','Pesto','Tahini'],
         vegetable:['Broccoli','Green beans','Asparagus','Zucchini','Bell peppers','Spinach','Salad greens','Cauliflower','Carrots','Brussels sprouts','Mushrooms','Cucumber','Tomatoes','Mixed vegetables','Snap peas']
       }
@@ -2421,7 +2421,11 @@
   const FOOD_FAMILIES = {
     'Fruit':{
       category:'carbs',
-      children:['Berries','Banana','Apple','Orange','Grapes','Pineapple','Mango','Melon']
+      children:['Berries','Banana','Apple','Orange','Grapes','Pineapple','Mango','Melon','Pear','Peach','Kiwi','Cherries']
+    },
+    'Bread / wraps':{
+      category:'carbs',
+      children:['Bread','English muffin','Bagel','Pita','Wrap / tortilla','Rice cakes']
     }
   };
   function foodFamilyFor(name,key){
@@ -2466,6 +2470,14 @@
     'Pineapple':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:10.8,protein:.4,fat:.1}},
     'Mango':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:12.5,protein:.7,fat:.3}},
     'Melon':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:6.5,protein:.5,fat:.1}},
+    'Pear':{category:'carbs',step:.5,unit:'medium',min:1,max:4,ideal:2,macros:{carbs:13.5,protein:.3,fat:.1}},
+    'Peach':{category:'carbs',step:.5,unit:'medium',min:1,max:4,ideal:2,macros:{carbs:7.5,protein:.7,fat:.2}},
+    'Kiwi':{category:'carbs',step:.5,unit:'medium',min:1,max:6,ideal:2,macros:{carbs:5.3,protein:.4,fat:.2}},
+    'Cherries':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:12.5,protein:1,fat:.2}},
+    'English muffin':{category:'carbs',step:.5,unit:'muffin',min:1,max:4,ideal:2,macros:{carbs:24,protein:5,fat:1}},
+    'Bagel':{category:'carbs',step:.5,unit:'bagel',min:1,max:3,ideal:1,macros:{carbs:48,protein:10,fat:1.5}},
+    'Pita':{category:'carbs',step:.5,unit:'pita',min:1,max:4,ideal:2,macros:{carbs:17,protein:5,fat:1}},
+    'Rice cakes':{category:'carbs',step:1,unit:'cake',min:1,max:10,ideal:3,macros:{carbs:7,protein:.7,fat:.3}},
 
     'Avocado':{category:'fat',step:.125,unit:'medium',min:1,max:6,ideal:2,macros:{carbs:1.5,protein:.4,fat:2.5}},
     'Olive oil':{category:'fat',step:1,unit:'tsp',min:1,max:5,ideal:2,macros:{carbs:0,protein:0,fat:4.5}},
@@ -3454,6 +3466,12 @@
       <circle cx="21" cy="15.3" r="3.8" fill="#F2A23A"/>
       <path d="M15.5 8.5c1.6-2.1 4.2-2.4 5.8-1.2-1.3 2.3-3.7 3-5.8 1.2z" fill="#61A86C"/>
     `);
+    if(s==='bread / wraps') return svg(`
+      <path d="M7.5 22c0-5 3.2-9.5 8.5-9.5 5.2 0 8.5 4.5 8.5 9.5H7.5z" fill="#F3D6A6" stroke="#D1AA74" stroke-width="1"/>
+      <path d="M9.5 12.8c.8-3.6 3.3-5.8 6.5-5.8 3.2 0 5.7 2.2 6.5 5.8" fill="#E5BF8B"/>
+      <ellipse cx="21.8" cy="20" rx="5.7" ry="3.5" fill="#F4E7D4" stroke="#D9C2A0" stroke-width="1"/>
+      <path d="M18.2 20c1.4-1.6 3.7-2.6 7-2.7" stroke="#D9C2A0" stroke-width=".9" fill="none"/>
+    `);
     if(/berries/.test(s)) return svg(`
       <circle cx="11" cy="18" r="5" fill="#6472D9"/><circle cx="17.5" cy="15" r="5.2" fill="#5366C8"/><circle cx="21.5" cy="20" r="4.5" fill="#7A5AC7"/>
       <path d="M15.5 10c1.2-2.5 4.4-3.4 6.6-2.2-1.1 2.5-4.3 3.7-6.6 2.2z" fill="#62A56B"/>
@@ -3490,6 +3508,42 @@
       <path d="M6.5 18c5.8 8.5 13.3 8.5 19 0H6.5z" fill="#A8D878" stroke="#6FA856" stroke-width="1"/>
       <path d="M8.4 18c4.9 5.5 10.3 5.5 15.2 0" fill="#F5C7A6"/>
       <circle cx="13" cy="20.6" r=".7" fill="#8C6C4F"/><circle cx="17" cy="20.8" r=".7" fill="#8C6C4F"/><circle cx="20" cy="19.8" r=".7" fill="#8C6C4F"/>
+    `);
+    if(/pear/.test(s)) return svg(`
+      <path d="M12.5 11.5c-2.4 2.2-3.8 5-3.8 8 0 4.5 3 7.8 7.3 7.8s7.3-3.3 7.3-7.8c0-3.2-1.6-6-4.2-8 1-2.1.9-4.1-.2-5.8-2.3.3-4 1.8-4.4 3.7-1.2.1-1.8.5-2 .9z" fill="#A8D878" stroke="#7EAD5C" stroke-width="1"/>
+      <path d="M16 8.8c.2-1.8 1-3.1 2.5-4.3" stroke="#6F5A3D" stroke-width="1.3" stroke-linecap="round"/>
+    `);
+    if(/peach/.test(s)) return svg(`
+      <path d="M16 9.5c-5.5-2.9-9.5 1.4-8.5 7.1 1 5.8 4.8 9 8.5 6.3 3.7 2.7 7.5-.5 8.5-6.3 1-5.7-3-10-8.5-7.1z" fill="#F4A476"/>
+      <path d="M16 10.5v13" stroke="#E57E58" stroke-width="1.1" opacity=".7"/>
+      <path d="M18 7.5c1.7-2 4.3-2.2 5.8-1.2-1.2 2-3.7 2.8-5.8 1.2z" fill="#69A872"/>
+    `);
+    if(/kiwi/.test(s)) return svg(`
+      <circle cx="16" cy="16.5" r="10" fill="#7CB35D"/>
+      <circle cx="16" cy="16.5" r="7" fill="#C6E98F"/>
+      <circle cx="16" cy="16.5" r="2.4" fill="#F6F2E3"/>
+      <g fill="#292B2C"><circle cx="16" cy="9.8" r=".55"/><circle cx="19.8" cy="10.9" r=".55"/><circle cx="22.2" cy="14.1" r=".55"/><circle cx="22" cy="18.1" r=".55"/><circle cx="19.3" cy="21.1" r=".55"/><circle cx="16" cy="22.2" r=".55"/><circle cx="12.7" cy="21.1" r=".55"/><circle cx="10" cy="18.1" r=".55"/><circle cx="9.8" cy="14.1" r=".55"/><circle cx="12.2" cy="10.9" r=".55"/></g>
+    `);
+    if(/cherries/.test(s)) return svg(`
+      <circle cx="12" cy="20" r="4.7" fill="#D73E49"/><circle cx="20" cy="20" r="4.7" fill="#C92E3A"/>
+      <path d="M12 15.5c1.5-3.8 4.3-6.5 7.7-8.2M20 15.5c-.2-3.5 1-6.2 3.8-8.2" stroke="#5A8D55" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    `);
+    if(/english muffin/.test(s)) return svg(`
+      <ellipse cx="16" cy="17" rx="8.8" ry="5.8" fill="#F0C98D" stroke="#CFA66F" stroke-width="1"/>
+      <ellipse cx="16" cy="17" rx="6.5" ry="3.7" fill="#F7E1BA"/>
+    `);
+    if(/bagel/.test(s)) return svg(`
+      <circle cx="16" cy="17" r="8.8" fill="#E2BB82" stroke="#BB8E56" stroke-width="1"/>
+      <circle cx="16" cy="17" r="3.5" fill="#F4F6F8"/>
+      <g fill="#CDA15F"><circle cx="11" cy="14.2" r=".8"/><circle cx="18.8" cy="13.8" r=".8"/><circle cx="20.5" cy="18.6" r=".8"/><circle cx="12.8" cy="20" r=".8"/></g>
+    `);
+    if(/pita/.test(s)) return svg(`
+      <path d="M7.5 20c1.7-5.5 6-9 8.5-9s6.8 3.5 8.5 9H7.5z" fill="#F0D3A1" stroke="#D6AF77" stroke-width="1"/>
+      <path d="M11 16.8c2.4-1.6 7.6-1.6 10 0" stroke="#D4AF7B" stroke-width="1" opacity=".8"/>
+    `);
+    if(/rice cakes/.test(s)) return svg(`
+      <ellipse cx="13" cy="17.5" rx="5.8" ry="4.2" fill="#F4E6C8" stroke="#D7C19B" stroke-width="1"/>
+      <ellipse cx="19.5" cy="15.5" rx="5.8" ry="4.2" fill="#F7EBD3" stroke="#D7C19B" stroke-width="1"/>
     `);
 
     if(/chicken|turkey/.test(s)) return '🍗';
