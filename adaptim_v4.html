@@ -2011,6 +2011,83 @@
   }
   .shell.tactical .lockin-rhythm{opacity:1}
 
+
+  /* ---------- FOOD FAMILIES / MINI VISUALS ---------- */
+  .food-card-icon{
+    width:38px;
+    height:38px;
+    margin:0 auto 8px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(145deg,#ffffff,#f4f7fb);
+    border:1px solid #e8edf3;
+    box-shadow:0 3px 8px rgba(28,54,87,.045);
+    font-size:22px !important;
+  }
+  .food-card-icon svg,
+  .food-visual svg{
+    width:28px;
+    height:28px;
+    display:block;
+  }
+  .food-family-panel{
+    display:none;
+    margin-top:9px;
+  }
+  .food-family-panel.show{display:block}
+  .food-family-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:0 2px 8px;
+  }
+  .food-family-back{
+    appearance:none;
+    border:0;
+    background:transparent;
+    color:#48627f;
+    padding:3px 4px;
+    font:inherit;
+    font-size:11px;
+    cursor:pointer;
+  }
+  .food-family-title{
+    font-size:10px;
+    font-weight:650;
+    text-transform:uppercase;
+    letter-spacing:1.15px;
+    color:#73849a;
+  }
+  .food-family-spacer{width:42px}
+  .food-family-card .food-card-name{font-size:10.5px}
+  .food-card.family-card{
+    border-style:dashed;
+    background:linear-gradient(145deg,#fbfdff,#f5f8fc);
+  }
+  .food-card.family-card::after{
+    content:"›";
+    position:absolute;
+    right:8px;
+    top:7px;
+    font-size:13px;
+    color:#98a8ba;
+  }
+  .food-card{position:relative}
+
+  .shell.tactical .food-card-icon{
+    background:linear-gradient(145deg,#17212b,#0b1219);
+    border-color:#31404f;
+    box-shadow:0 3px 9px rgba(0,0,0,.20),0 0 8px rgba(47,140,255,.035);
+  }
+  .shell.tactical .food-family-back{color:#aebdcd}
+  .shell.tactical .food-family-title{color:#8195aa}
+  .shell.tactical .food-card.family-card{
+    background:linear-gradient(145deg,#111c27,#0b141d);
+    border-color:#34475a;
+  }
+  .shell.tactical .food-card.family-card::after{color:#71859a}
+
 </style>
 
 </head>
@@ -2320,7 +2397,7 @@
       slotMeaning:'provider-defined',
       foodOptions:{
         protein:['Chicken breast','Turkey breast','Lean beef','Steak','Salmon','White fish','Shrimp','Tuna','Greek yogurt','Cottage cheese','Eggs','Egg whites','Tofu','Tempeh','Protein shake'],
-        carbs:['Rice','Potato','Sweet potato','Oats','Pasta','Bread','Wrap / tortilla','Quinoa','Cereal','Beans','Lentils','Banana','Berries','Apple','Mixed fruit'],
+        carbs:['Rice','Oats','Potato','Sweet potato','Bread','Wrap / tortilla','Pasta','Quinoa','Cereal','Beans','Lentils','Fruit'],
         fat:['Avocado','Olive oil','Almonds','Walnuts','Peanuts','Nut butter','Seeds','Cheese','Olives','Hummus','Pesto','Tahini'],
         vegetable:['Broccoli','Green beans','Asparagus','Zucchini','Bell peppers','Spinach','Salad greens','Cauliflower','Carrots','Brussels sprouts','Mushrooms','Cucumber','Tomatoes','Mixed vegetables','Snap peas']
       }
@@ -2338,6 +2415,20 @@
   /* Approximate, practical food profiles for the V1 meal-fitting engine.
      Every food carries all three macros. Profiles can later be replaced by
      provider/API food data without changing the meal-builder interface. */
+
+  /* Progressive-disclosure food families.
+     Families are browse-only navigation; the optimizer always receives a specific food. */
+  const FOOD_FAMILIES = {
+    'Fruit':{
+      category:'carbs',
+      children:['Berries','Banana','Apple','Orange','Grapes','Pineapple','Mango','Melon']
+    }
+  };
+  function foodFamilyFor(name,key){
+    const hit=Object.entries(FOOD_FAMILIES).find(([family,def])=>def.category===key && def.children.includes(name));
+    return hit ? hit[0] : '';
+  }
+
   const FOOD_LIBRARY = {
     'Chicken breast':{category:'protein',step:.5,unit:'oz',min:4,max:18,ideal:10,macros:{carbs:0,protein:4.4,fat:.5}},
     'Turkey breast':{category:'protein',step:.5,unit:'oz',min:4,max:18,ideal:10,macros:{carbs:0,protein:4.2,fat:.3}},
@@ -2370,6 +2461,11 @@
     'Berries':{category:'carbs',step:.5,unit:'cup',min:1,max:4,ideal:2,macros:{carbs:10,protein:.7,fat:.3}},
     'Apple':{category:'carbs',step:.5,unit:'medium',min:1,max:3,ideal:2,macros:{carbs:12.5,protein:.25,fat:.15}},
     'Mixed fruit':{category:'carbs',step:.5,unit:'cup',min:1,max:4,ideal:2,macros:{carbs:15,protein:.5,fat:.2}},
+    'Orange':{category:'carbs',step:.5,unit:'medium',min:1,max:4,ideal:2,macros:{carbs:7.7,protein:.6,fat:.1}},
+    'Grapes':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:13.5,protein:.6,fat:.1}},
+    'Pineapple':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:10.8,protein:.4,fat:.1}},
+    'Mango':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:12.5,protein:.7,fat:.3}},
+    'Melon':{category:'carbs',step:.5,unit:'cup',min:1,max:6,ideal:2,macros:{carbs:6.5,protein:.5,fat:.1}},
 
     'Avocado':{category:'fat',step:.125,unit:'medium',min:1,max:6,ideal:2,macros:{carbs:1.5,protein:.4,fat:2.5}},
     'Olive oil':{category:'fat',step:1,unit:'tsp',min:1,max:5,ideal:2,macros:{carbs:0,protein:0,fat:4.5}},
@@ -3349,6 +3445,53 @@
   }
   function foodIcon(item,key){
     const s=(item||'').toLowerCase();
+    const svg=(body)=>`<svg viewBox="0 0 32 32" aria-hidden="true">${body}</svg>`;
+
+    if(s==='fruit') return svg(`
+      <path d="M6.5 18.5h19l-2.2 6.7c-.4 1.2-1.5 2-2.8 2h-9c-1.3 0-2.4-.8-2.8-2z" fill="#E8EDF4" stroke="#9AABBD" stroke-width="1"/>
+      <circle cx="11" cy="15" r="4" fill="#E84D55"/>
+      <circle cx="16.3" cy="13.5" r="4.2" fill="#6977D9"/>
+      <circle cx="21" cy="15.3" r="3.8" fill="#F2A23A"/>
+      <path d="M15.5 8.5c1.6-2.1 4.2-2.4 5.8-1.2-1.3 2.3-3.7 3-5.8 1.2z" fill="#61A86C"/>
+    `);
+    if(/berries/.test(s)) return svg(`
+      <circle cx="11" cy="18" r="5" fill="#6472D9"/><circle cx="17.5" cy="15" r="5.2" fill="#5366C8"/><circle cx="21.5" cy="20" r="4.5" fill="#7A5AC7"/>
+      <path d="M15.5 10c1.2-2.5 4.4-3.4 6.6-2.2-1.1 2.5-4.3 3.7-6.6 2.2z" fill="#62A56B"/>
+    `);
+    if(/banana/.test(s)) return svg(`
+      <path d="M8 9.5c2.5 9 7.8 12.5 15.5 9.8-2 5.7-8.8 8-13.7 4.4C5.9 20.8 4.9 14.8 8 9.5z" fill="#F2C94C" stroke="#D5A82F" stroke-width="1.1"/>
+      <path d="M8.1 9.3l2 1.2" stroke="#7C6B43" stroke-width="1.2" stroke-linecap="round"/>
+    `);
+    if(/apple/.test(s)) return svg(`
+      <path d="M16 10c-5.7-3.4-10.4 1.1-9 7.6 1.2 5.6 5.2 8.8 9 5.8 3.8 3 7.8-.2 9-5.8 1.4-6.5-3.3-11-9-7.6z" fill="#E84E52"/>
+      <path d="M16 9c.2-2.2 1.2-3.8 3-5" stroke="#6F5A3D" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M18 7c2.2-2 4.7-1.8 6.1-.7-1.5 2.1-4.1 2.7-6.1.7z" fill="#5EA76A"/>
+    `);
+    if(/orange/.test(s)) return svg(`
+      <circle cx="16" cy="17" r="9.5" fill="#F29B38"/>
+      <path d="M16 7.3c.7-2.5 3.4-3.7 5.8-2.8-1 2.4-3.5 3.4-5.8 2.8z" fill="#61A76D"/>
+      <path d="M16 10.5v13M9.8 17h12.4" stroke="#FFD08B" stroke-width=".8" opacity=".65"/>
+    `);
+    if(/grapes/.test(s)) return svg(`
+      <g fill="#7757C7"><circle cx="13" cy="12" r="3.3"/><circle cx="18" cy="12" r="3.3"/><circle cx="10.5" cy="17" r="3.3"/><circle cx="15.5" cy="17" r="3.3"/><circle cx="20.5" cy="17" r="3.3"/><circle cx="13.5" cy="22" r="3.3"/><circle cx="18.3" cy="22" r="3.3"/></g>
+      <path d="M16 8c.2-2.2 1.1-3.6 2.8-4.7" stroke="#597D46" stroke-width="1.3" stroke-linecap="round"/>
+    `);
+    if(/pineapple/.test(s)) return svg(`
+      <path d="M10 12.5c2-3.3 10-3.3 12 0v10c-2 3.4-10 3.4-12 0z" fill="#EFB54A" stroke="#CC9430" stroke-width="1"/>
+      <path d="M16 11l-5-5M16 11l5-5M16 11V4M16 11l-2-7M16 11l2-7" stroke="#5EA66B" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 16l8 6M20 16l-8 6" stroke="#D69C31" stroke-width=".8" opacity=".8"/>
+    `);
+    if(/mango/.test(s)) return svg(`
+      <path d="M9.5 20.5C8 14 11 7.5 17 7c5.8-.5 8.2 4.6 6 10.3-2.7 7.2-11.9 9.5-13.5 3.2z" fill="#F3A53C"/>
+      <path d="M17.5 7c1.3-2.2 4-2.9 6-1.8-1.2 2.3-3.8 3.2-6 1.8z" fill="#5FA76C"/>
+      <path d="M10.3 19.7c3.3 1.5 7.4.6 10-2.1" stroke="#EA7044" stroke-width="1.3" opacity=".75" fill="none"/>
+    `);
+    if(/melon/.test(s)) return svg(`
+      <path d="M6.5 18c5.8 8.5 13.3 8.5 19 0H6.5z" fill="#A8D878" stroke="#6FA856" stroke-width="1"/>
+      <path d="M8.4 18c4.9 5.5 10.3 5.5 15.2 0" fill="#F5C7A6"/>
+      <circle cx="13" cy="20.6" r=".7" fill="#8C6C4F"/><circle cx="17" cy="20.8" r=".7" fill="#8C6C4F"/><circle cx="20" cy="19.8" r=".7" fill="#8C6C4F"/>
+    `);
+
     if(/chicken|turkey/.test(s)) return '🍗';
     if(/beef|steak/.test(s)) return '🥩';
     if(/salmon|fish|tuna|shrimp/.test(s)) return '🐟';
@@ -3361,10 +3504,6 @@
     if(/oat|cereal|quinoa|lentil|bean/.test(s)) return '🌾';
     if(/pasta/.test(s)) return '🍝';
     if(/bread|wrap|tortilla/.test(s)) return '🍞';
-    if(/banana/.test(s)) return '🍌';
-    if(/berries/.test(s)) return '🫐';
-    if(/apple/.test(s)) return '🍎';
-    if(/fruit/.test(s)) return '🍓';
     if(/avocado/.test(s)) return '🥑';
     if(/oil|olive/.test(s)) return '🫒';
     if(/almond|walnut|peanut|nuts/.test(s)) return '🥜';
@@ -3424,7 +3563,17 @@
     const target=o.planned||{carbs:0,protein:0,fat:0};
     let fit=fitMealToFoods(draft,target,balance);
 
-    const optionCards=(key)=> (options[key]||[]).map(item=>`<button class="food-card ${draft[key].includes(item)?'selected':''}" data-food-key="${key}" data-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`).join('');
+    const optionCards=(key)=> (options[key]||[]).map(item=>{
+      const family=FOOD_FAMILIES[item];
+      if(family && family.category===key){
+        const familySelected=family.children.some(child=>draft[key].includes(child));
+        return `<button class="food-card family-card ${familySelected?'selected':''}" data-food-family-key="${key}" data-food-family="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`;
+      }
+      return `<button class="food-card ${draft[key].includes(item)?'selected':''}" data-food-key="${key}" data-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`;
+    }).join('');
+    const familyPanels=(key)=> Object.entries(FOOD_FAMILIES)
+      .filter(([family,def])=>def.category===key && (options[key]||[]).includes(family))
+      .map(([family,def])=>`<div class="food-family-panel" data-family-panel="${key}-${family}"><div class="food-family-head"><button class="food-family-back" data-family-back="${key}">‹ ${titles[key]}</button><div class="food-family-title">${family}</div><span class="food-family-spacer"></span></div><div class="food-carousel">${def.children.map(item=>`<button class="food-card food-family-card ${draft[key].includes(item)?'selected':''}" data-family-food-key="${key}" data-family-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`).join('')}</div></div>`).join('');
     const itemLine=(key,slot)=>{
       const selected=draft[key][slot]||'';
       const portion=fit?.portions?.[key]?.[slot]?.portion||'—';
@@ -3436,7 +3585,7 @@
       const left=Math.round(balanceRatioFromIndex(idx)*100), right=100-left;
       return `<div class="food-balance-block" data-balance-block="${key}"><div class="food-balance-meta"><span>Balance</span><b data-balance-value="${key}">${left} / ${right}</b></div><input class="food-balance-slider" data-balance-slider="${key}" type="range" min="-2" max="2" step="1" value="${idx}" aria-label="Balance ${titles[key].toLowerCase()} foods"><div class="food-balance-note" data-balance-note="${key}"></div></div>`;
     };
-    const row=(key)=>`<div class="food-select-row double-food" data-food-row="${key}"><div class="food-category-head"><div class="food-select-label">${titles[key]}</div></div>${itemLine(key,0)}${balanceBlock(key)}${itemLine(key,1)}<button class="food-add-btn" data-add-key="${key}" ${draft[key].length>=2?'style="display:none"':''}>+ Add another</button><div class="food-carousel-wrap" data-carousel-wrap="${key}" data-active-slot="0"><div class="food-carousel">${optionCards(key)}</div></div></div>`;
+    const row=(key)=>`<div class="food-select-row double-food" data-food-row="${key}"><div class="food-category-head"><div class="food-select-label">${titles[key]}</div></div>${itemLine(key,0)}${balanceBlock(key)}${itemLine(key,1)}<button class="food-add-btn" data-add-key="${key}" ${draft[key].length>=2?'style="display:none"':''}>+ Add another</button><div class="food-carousel-wrap" data-carousel-wrap="${key}" data-active-slot="0"><div class="food-carousel" data-main-food-carousel="${key}">${optionCards(key)}</div>${familyPanels(key)}</div></div>`;
 
     openOverlay(`<div class="meal-detail"><div class="meal-page-head"><button class="back-btn" id="foodBack" aria-label="Back">‹</button><h2>Choose foods</h2><span class="meal-page-head-spacer"></span></div><p class="food-builder-lead">Meal ${o.order} · Portions adjust automatically.</p><div class="food-builder-stack">${row('protein')}${row('carbs')}${row('fat')}${row('vegetable')}</div><div id="mealFitCard">${fitCardHtml(fit)}</div><div class="food-builder-actions"><button class="primary" id="saveFoodSwap">Use this meal</button></div></div>`);
 
@@ -3496,11 +3645,16 @@
         const line=document.querySelector(`[data-food-item="${key}-${slot}"]`);
         if(line) line.style.display=selected?'grid':'none';
         const name=document.querySelector(`[data-food-name="${key}-${slot}"]`); if(name) name.textContent=selected;
-        const icon=document.querySelector(`[data-food-icon="${key}-${slot}"]`); if(icon) icon.textContent=selected?foodIcon(selected,key):'';
+        const icon=document.querySelector(`[data-food-icon="${key}-${slot}"]`); if(icon) icon.innerHTML=selected?foodIcon(selected,key):'';
         const portion=document.querySelector(`[data-food-portion="${key}-${slot}"]`); if(portion) portion.textContent=fit?.portions?.[key]?.[slot]?.portion||'—';
       });
       const add=document.querySelector(`[data-add-key="${key}"]`); if(add) add.style.display=draft[key].length<2?'inline-block':'none';
       document.querySelectorAll(`[data-food-key="${key}"]`).forEach(card=>card.classList.toggle('selected',draft[key].includes(card.dataset.foodValue)));
+      document.querySelectorAll(`[data-family-food-key="${key}"]`).forEach(card=>card.classList.toggle('selected',draft[key].includes(card.dataset.familyFoodValue)));
+      document.querySelectorAll(`[data-food-family-key="${key}"]`).forEach(card=>{
+        const family=FOOD_FAMILIES[card.dataset.foodFamily];
+        card.classList.toggle('selected',!!family && family.children.some(child=>draft[key].includes(child)));
+      });
       updateBalanceUI(key);
     };
     const refreshFit=(recalcStates=true)=>{
@@ -3509,11 +3663,37 @@
       keys.forEach(updateCategoryUI);
       const card=$('mealFitCard'); if(card) card.innerHTML=fitCardHtml(fit);
     };
+    const resetFamilyView=(wrap)=>{
+      if(!wrap) return;
+      const key=wrap.dataset.carouselWrap;
+      const main=wrap.querySelector(`[data-main-food-carousel="${key}"]`);
+      if(main) main.style.display='flex';
+      wrap.querySelectorAll('[data-family-panel]').forEach(panel=>panel.classList.remove('show'));
+    };
     const openCarousel=(key,slot)=>{
-      document.querySelectorAll('[data-carousel-wrap]').forEach(w=>w.classList.remove('show'));
+      document.querySelectorAll('[data-carousel-wrap]').forEach(w=>{w.classList.remove('show');resetFamilyView(w);});
       const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`); if(!wrap) return;
-      wrap.dataset.activeSlot=String(slot);wrap.classList.add('show');
+      wrap.dataset.activeSlot=String(slot);wrap.classList.add('show');resetFamilyView(wrap);
       setTimeout(()=>wrap.scrollIntoView({block:'nearest',behavior:'smooth'}),30);
+    };
+    const openFamily=(key,family)=>{
+      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`); if(!wrap) return;
+      const main=wrap.querySelector(`[data-main-food-carousel="${key}"]`); if(main) main.style.display='none';
+      wrap.querySelectorAll('[data-family-panel]').forEach(panel=>panel.classList.remove('show'));
+      const panel=wrap.querySelector(`[data-family-panel="${key}-${family}"]`);
+      if(panel){panel.classList.add('show');setTimeout(()=>panel.scrollIntoView({block:'nearest',behavior:'smooth'}),20);}
+    };
+    const chooseFood=(key,value,wrap)=>{
+      const slot=Math.max(0,Math.min(1,Number(wrap?.dataset.activeSlot)||0));
+      const other=slot===0?draft[key][1]:draft[key][0];
+      if(other===value){toast('Already selected');return;}
+      if(slot===0) draft[key][0]=value;
+      else {
+        if(draft[key].length<2) draft[key].push(value); else draft[key][1]=value;
+        if(draft[key].length===2 && !Number.isFinite(Number(balance[key]))) balance[key]=.5;
+      }
+      refreshFit();
+      if(wrap) setTimeout(()=>{wrap.classList.remove('show');resetFamilyView(wrap);},120);
     };
 
     normalizeBalanceStates();
@@ -3531,16 +3711,19 @@
     document.querySelectorAll('[data-food-key]').forEach(b=>b.onclick=()=>{
       const key=b.dataset.foodKey, value=b.dataset.foodValue;
       const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`);
-      const slot=Math.max(0,Math.min(1,Number(wrap?.dataset.activeSlot)||0));
-      const other=slot===0?draft[key][1]:draft[key][0];
-      if(other===value){toast('Already selected');return;}
-      if(slot===0) draft[key][0]=value;
-      else {
-        if(draft[key].length<2) draft[key].push(value); else draft[key][1]=value;
-        if(draft[key].length===2 && !Number.isFinite(Number(balance[key]))) balance[key]=.5;
-      }
-      refreshFit();
-      if(wrap) setTimeout(()=>wrap.classList.remove('show'),120);
+      chooseFood(key,value,wrap);
+    });
+    document.querySelectorAll('[data-food-family]').forEach(b=>b.onclick=()=>{
+      openFamily(b.dataset.foodFamilyKey,b.dataset.foodFamily);
+    });
+    document.querySelectorAll('[data-family-back]').forEach(b=>b.onclick=()=>{
+      const wrap=document.querySelector(`[data-carousel-wrap="${b.dataset.familyBack}"]`);
+      resetFamilyView(wrap);
+    });
+    document.querySelectorAll('[data-family-food-key]').forEach(b=>b.onclick=()=>{
+      const key=b.dataset.familyFoodKey, value=b.dataset.familyFoodValue;
+      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`);
+      chooseFood(key,value,wrap);
     });
     document.querySelectorAll('[data-balance-slider]').forEach(slider=>{
       const apply=()=>{
