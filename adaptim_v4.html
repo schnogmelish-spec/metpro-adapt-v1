@@ -1435,6 +1435,142 @@
     box-shadow:0 0 15px rgba(198,40,40,.52),inset 0 0 12px rgba(198,40,40,.18) !important;
   }
 
+
+
+  /* ==========================================================
+     ADAPTIM TACTICAL — GUNMETAL REFINEMENT
+     Visual-only patch: centers 3/4/5/6 and toughens Tactical UI.
+     No intake, meal, profile, API, navigation, or safety logic.
+     ========================================================== */
+  .shell.tactical{
+    --tactical-gunmetal:#202830;
+    --tactical-gunmetal-2:#2A343E;
+    --tactical-gunmetal-3:#394550;
+    --tactical-steel:#AEB8C2;
+    --tactical-steel-hi:#E7ECF1;
+    background:
+      radial-gradient(circle at 50% 10%,rgba(47,140,255,.14),transparent 25%),
+      radial-gradient(circle at 12% 58%,rgba(198,40,40,.05),transparent 22%),
+      linear-gradient(180deg,#080A0C 0%,#11161A 44%,#0A0D10 100%) !important;
+    border-color:#323B44 !important;
+    box-shadow:
+      0 24px 82px rgba(0,0,0,.52),
+      inset 0 1px 0 rgba(255,255,255,.025),
+      0 0 36px rgba(47,140,255,.04) !important;
+  }
+
+  /* Four Tactical intake choices should occupy the full selector evenly. */
+  .shell.tactical .phase-track{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    background:linear-gradient(180deg,#151B20 0%,#0A0D10 58%,#11161B 100%) !important;
+    border-color:#414C57 !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.07),
+      inset 0 -1px 0 rgba(0,0,0,.62),
+      inset 0 0 20px rgba(0,0,0,.30) !important;
+  }
+  .shell.tactical .phase-btn{
+    color:#D0D7DE !important;
+    text-shadow:0 1px 0 rgba(255,255,255,.025) !important;
+  }
+  .shell.tactical .phase-btn.active{
+    background:linear-gradient(180deg,#252E36 0%,#151B21 100%) !important;
+    border-color:rgba(72,156,255,.92) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.10),
+      0 0 0 1px rgba(47,140,255,.18),
+      0 0 20px rgba(47,140,255,.38),
+      0 9px 22px rgba(0,0,0,.42) !important;
+  }
+
+  /* Gunmetal surfaces with a restrained machined-metal edge. */
+  .shell.tactical .status-card,
+  .shell.tactical .macro-card,
+  .shell.tactical .summary,
+  .shell.tactical .profile-card,
+  .shell.tactical .choice,
+  .shell.tactical .meal-entry,
+  .shell.tactical .occasion-count,
+  .shell.tactical .remaining-strip,
+  .shell.tactical .occasion-card,
+  .shell.tactical .occasion-target-cell,
+  .shell.tactical .meal-fit-card,
+  .shell.tactical .meal-detail .occasion-target-cell,
+  .shell.tactical .meal-food-action,
+  .shell.tactical .food-select-row,
+  .shell.tactical .food-card{
+    background:linear-gradient(145deg,#252E36 0%,#1B2229 48%,#14191E 100%) !important;
+    border-color:#3E4954 !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.055),
+      inset 0 -1px 0 rgba(0,0,0,.26),
+      0 10px 24px rgba(0,0,0,.29) !important;
+  }
+
+  .shell.tactical .status-icon-well,
+  .shell.tactical .macro-icon,
+  .shell.tactical .summary-icon,
+  .shell.tactical .occasion-index,
+  .shell.tactical .food-visual,
+  .shell.tactical .food-swap-btn,
+  .shell.tactical .macro-adjust button,
+  .shell.tactical .back-btn,
+  .shell.tactical .mini-profile{
+    background:linear-gradient(145deg,#222A31,#11161B) !important;
+    border-color:#46525E !important;
+    color:#E2E7EC !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.07),
+      0 6px 16px rgba(0,0,0,.24) !important;
+  }
+
+  .shell.tactical .summary-item,
+  .shell.tactical .summary-link,
+  .shell.tactical .meal-adjust-panel,
+  .shell.tactical .food-carousel-wrap,
+  .shell.tactical .food-item-line + .food-item-line{
+    border-color:#36414B !important;
+  }
+
+  .shell.tactical .macro-bar,
+  .shell.tactical .food-balance-slider::-webkit-slider-runnable-track{
+    background:linear-gradient(180deg,#4B5660,#303840) !important;
+  }
+
+  /* Same Tactical avatar artwork; treatment only adds steel/white highlights. */
+  .shell.tactical .avatar{
+    filter:
+      brightness(.98)
+      contrast(1.16)
+      saturate(.84)
+      drop-shadow(0 1px 1px rgba(255,255,255,.36))
+      drop-shadow(0 10px 19px rgba(0,0,0,.44))
+      drop-shadow(0 0 11px rgba(47,140,255,.50)) !important;
+  }
+  @keyframes tacticalShellGlow{
+    0%,100%{
+      filter:brightness(.97) contrast(1.16) saturate(.82)
+        drop-shadow(0 1px 1px rgba(255,255,255,.32))
+        drop-shadow(0 10px 19px rgba(0,0,0,.44))
+        drop-shadow(0 0 9px rgba(47,140,255,.42));
+    }
+    50%{
+      filter:brightness(1.01) contrast(1.18) saturate(.88)
+        drop-shadow(0 1px 1px rgba(255,255,255,.42))
+        drop-shadow(0 10px 19px rgba(0,0,0,.44))
+        drop-shadow(0 0 15px rgba(47,140,255,.62));
+    }
+  }
+  .shell.tactical .avatar-aura{
+    background:radial-gradient(circle,rgba(47,140,255,.21) 0%,rgba(47,140,255,.075) 36%,rgba(174,184,194,.025) 55%,rgba(9,11,13,0) 76%) !important;
+  }
+  .shell.tactical .brand,
+  .shell.tactical .adaptive-title h2,
+  .shell.tactical .macro-grams,
+  .shell.tactical .summary-value{
+    color:#F6F8FA !important;
+  }
+
 </style>
 
 </head>
