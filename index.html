@@ -914,6 +914,119 @@
   .shell.tactical .occasion-macros i{color:#4d6076}
   .shell.tactical .selection-line{color:#8396ad}
 
+
+  /* ---------- MEAL DETAIL + FOOD SWAP — APPLE-CLEAN POLISH ---------- */
+  .meal-detail-lead{
+    color:#8a98ac;font-size:12.5px;line-height:1.4;margin:5px 0 16px;
+  }
+  .meal-detail .occasion-target-box{margin:13px 0 20px;gap:9px}
+  .meal-detail .occasion-target-cell{
+    background:#fff;border:1px solid #e2e9f1;border-radius:17px;padding:14px 7px;
+    box-shadow:0 5px 15px rgba(21,48,88,.025)
+  }
+  .meal-detail .occasion-target-cell b{font-size:23px;font-weight:390}
+  .meal-detail .occasion-target-cell span{font-size:8px;letter-spacing:1.2px;margin-top:4px}
+  .meal-food-action{
+    width:100%;border:1px solid #dce6f2;background:linear-gradient(180deg,#fff,#fbfdff);
+    color:#173052;border-radius:18px;min-height:68px;padding:13px 15px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;
+    cursor:pointer;box-shadow:0 7px 20px rgba(21,48,88,.04);margin:0 0 16px
+  }
+  .meal-food-action:active{transform:scale(.988)}
+  .meal-food-action strong{display:block;font-size:16px;font-weight:570;letter-spacing:-.15px}
+  .meal-food-action small{display:block;color:#8a98ac;font-size:11.2px;margin-top:4px;line-height:1.3}
+  .meal-food-action .meal-action-arrow{
+    width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+    background:#f2f7ff;color:#1267ff;font-size:19px;flex:none
+  }
+  .meal-primary-action{
+    width:100%;height:51px;border:0;border-radius:16px;background:#1267ff;color:#fff;
+    font-size:14px;font-weight:610;cursor:pointer;box-shadow:0 8px 18px rgba(18,103,255,.16);
+    margin:0 0 14px
+  }
+  .meal-primary-action:active{transform:scale(.99)}
+  .meal-quiet-actions{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:2px 0 9px}
+  .meal-quiet-btn{
+    border:0;background:transparent;color:#60738f;font-size:12px;font-weight:520;
+    padding:8px 10px;border-radius:10px;cursor:pointer
+  }
+  .meal-quiet-btn:active{background:#f5f8fc}
+  .meal-adjust-panel{
+    display:none;border-top:1px solid #edf1f5;margin:5px 0 3px;padding:15px 0 2px
+  }
+  .meal-adjust-panel.show{display:block}
+  .meal-adjust-panel .macro-log-grid{margin-top:0}
+  .meal-adjust-panel .macro-log-grid label{font-size:10px;color:#7b8ba1}
+  .meal-adjust-panel .text-input{background:#fbfcfe}
+  .meal-adjust-panel .meal-primary-action{margin-top:13px;margin-bottom:6px}
+  .meal-skip{
+    display:block;margin:7px auto 0;border:0;background:transparent;color:#ad666c;
+    padding:9px 12px;font-size:11.5px;cursor:pointer
+  }
+
+  .food-builder-lead{color:#8a98ac;font-size:12.5px;line-height:1.4;margin:4px 0 15px}
+  .food-builder-stack{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .food-select-row{
+    border:1px solid #e1e8f0;border-radius:18px;background:#fff;padding:12px 12px 12px 14px;
+    box-shadow:0 5px 16px rgba(21,48,88,.03)
+  }
+  .food-select-main{display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:center}
+  .food-visual{
+    width:42px;height:42px;border-radius:13px;background:#f7f9fc;display:grid;place-items:center;
+    font-size:21px;border:1px solid #edf1f5
+  }
+  .food-select-copy{min-width:0}
+  .food-select-label{
+    font-size:8.5px;letter-spacing:1.35px;text-transform:uppercase;color:#7d8da3;font-weight:680
+  }
+  .food-select-name{
+    font-size:14.5px;font-weight:570;color:#183151;margin-top:4px;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis
+  }
+  .food-swap-btn{
+    border:1px solid #dfe7f1;background:#fff;color:#315173;border-radius:12px;
+    min-width:58px;height:36px;padding:0 10px;font-size:11.5px;font-weight:560;cursor:pointer
+  }
+  .food-swap-btn:active{background:#f6f9fd;transform:scale(.97)}
+  .food-carousel-wrap{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf1f5}
+  .food-carousel-wrap.show{display:block}
+  .food-carousel{
+    display:flex;gap:9px;overflow-x:auto;overflow-y:hidden;padding:1px 1px 8px;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none
+  }
+  .food-carousel::-webkit-scrollbar{display:none}
+  .food-card{
+    flex:0 0 92px;min-height:94px;border:1px solid #e1e8f0;background:#fff;border-radius:15px;
+    padding:10px 8px 9px;text-align:center;color:#28415f;cursor:pointer;scroll-snap-align:start
+  }
+  .food-card.selected{border-color:#94baff;background:#f7faff;box-shadow:0 0 0 2px rgba(18,103,255,.05)}
+  .food-card .food-card-icon{font-size:25px;line-height:1;margin-bottom:9px}
+  .food-card .food-card-name{font-size:10.8px;line-height:1.2;font-weight:540}
+  .food-builder-actions{margin-top:19px}
+  .food-builder-actions .primary{width:100%;height:50px;border-radius:16px}
+  .food-cancel-link{
+    display:block;margin:8px auto 0;border:0;background:transparent;color:#8190a4;
+    font-size:11.5px;padding:8px 12px;cursor:pointer
+  }
+
+  .shell.tactical .meal-detail-lead,.shell.tactical .food-builder-lead{color:#8fa1b8}
+  .shell.tactical .meal-detail .occasion-target-cell,.shell.tactical .meal-food-action,
+  .shell.tactical .food-select-row,.shell.tactical .food-card{background:#0b1827;border-color:#293e56;color:#dce6f2}
+  .shell.tactical .meal-food-action strong,.shell.tactical .food-select-name{color:#f2f6fb}
+  .shell.tactical .meal-food-action small,.shell.tactical .food-select-label{color:#8496ac}
+  .shell.tactical .meal-food-action .meal-action-arrow{background:#0d2037;color:#5fa5ff}
+  .shell.tactical .meal-primary-action{background:#2f8cff}
+  .shell.tactical .meal-quiet-btn{color:#9badc1}
+  .shell.tactical .meal-quiet-btn:active{background:#0d1b2b}
+  .shell.tactical .meal-adjust-panel{border-color:#203349}
+  .shell.tactical .meal-adjust-panel .text-input{background:#091522}
+  .shell.tactical .food-visual{background:#0a1725;border-color:#2a3e55}
+  .shell.tactical .food-swap-btn{background:#0a1725;border-color:#30445b;color:#d6e2ef}
+  .shell.tactical .food-carousel-wrap{border-color:#203349}
+  .shell.tactical .food-card.selected{background:#0d2037;border-color:#3b83de;box-shadow:0 0 0 2px rgba(47,140,255,.08)}
+  .shell.tactical .food-card .food-card-name{color:#dce6f2}
+  .shell.tactical .food-cancel-link{color:#7e91a8}
+
 </style>
 
 </head>
@@ -1211,10 +1324,10 @@
       lighterFactor:.75,
       slotMeaning:'provider-defined',
       foodOptions:{
-        protein:['Chicken breast','Lean beef','White fish','Greek yogurt'],
-        carbs:['Rice','Potato','Oats','Fruit'],
-        fat:['Avocado','Olive oil','Nuts','Nut butter'],
-        vegetable:['Broccoli','Green beans','Mixed vegetables','Salad greens']
+        protein:['Chicken breast','Turkey breast','Lean beef','Steak','Salmon','White fish','Shrimp','Tuna','Greek yogurt','Cottage cheese','Eggs','Egg whites','Tofu','Tempeh','Protein shake'],
+        carbs:['Rice','Potato','Sweet potato','Oats','Pasta','Bread','Wrap / tortilla','Quinoa','Cereal','Beans','Lentils','Banana','Berries','Apple','Mixed fruit'],
+        fat:['Avocado','Olive oil','Almonds','Walnuts','Peanuts','Nut butter','Seeds','Cheese','Olives','Hummus','Pesto','Tahini'],
+        vegetable:['Broccoli','Green beans','Asparagus','Zucchini','Bell peppers','Spinach','Salad greens','Cauliflower','Carrots','Brussels sprouts','Mushrooms','Cucumber','Tomatoes','Mixed vegetables','Snap peas']
       }
     },
     rosc:{
@@ -1814,22 +1927,59 @@
     <div class="occasion-target-cell"><b>${Math.round(m.carbs||0)}g</b><span>CARBS</span></div>
     <div class="occasion-target-cell"><b>${Math.round(m.protein||0)}g</b><span>PROTEIN</span></div>
     <div class="occasion-target-cell"><b>${Math.round(m.fat||0)}g</b><span>FATS</span></div></div>`; }
+  function foodIcon(item,key){
+    const s=(item||'').toLowerCase();
+    if(/chicken|turkey/.test(s)) return '🍗';
+    if(/beef|steak/.test(s)) return '🥩';
+    if(/salmon|fish|tuna|shrimp/.test(s)) return '🐟';
+    if(/yogurt|cottage|cheese/.test(s)) return '🥣';
+    if(/egg/.test(s)) return '🥚';
+    if(/tofu|tempeh/.test(s)) return '◻️';
+    if(/shake/.test(s)) return '🥤';
+    if(/rice/.test(s)) return '🍚';
+    if(/potato/.test(s)) return '🥔';
+    if(/oat|cereal|quinoa|lentil|bean/.test(s)) return '🌾';
+    if(/pasta/.test(s)) return '🍝';
+    if(/bread|wrap|tortilla/.test(s)) return '🍞';
+    if(/banana/.test(s)) return '🍌';
+    if(/berries/.test(s)) return '🫐';
+    if(/apple/.test(s)) return '🍎';
+    if(/fruit/.test(s)) return '🍓';
+    if(/avocado/.test(s)) return '🥑';
+    if(/oil|olive/.test(s)) return '🫒';
+    if(/almond|walnut|peanut|nuts/.test(s)) return '🥜';
+    if(/butter|tahini|hummus|pesto/.test(s)) return '🥄';
+    if(/seed/.test(s)) return '🌻';
+    if(/broccoli/.test(s)) return '🥦';
+    if(/carrot/.test(s)) return '🥕';
+    if(/pepper/.test(s)) return '🫑';
+    if(/mushroom/.test(s)) return '🍄';
+    if(/tomato/.test(s)) return '🍅';
+    if(/cucumber|zucchini|green beans|asparagus|spinach|salad|cauliflower|brussels|vegetable|snap pea/.test(s)) return '🥬';
+    return key==='protein'?'🍗':key==='carbs'?'🍚':key==='fat'?'🥑':'🥦';
+  }
   function openOccasion(id){
     const o=getOccasion(id); if(!o) return;
     resetViewportTop();
     if(o.status==='open'){
       const m=o.planned||{carbs:0,protein:0,fat:0};
       const provider=PROVIDERS[state.providerId] || PROVIDERS.adaptim;
-      const lighterAction=provider.fullOccasionsOnly?'':`<button class="secondary" id="toggleLighter">${o.size==='light'?'Return to standard':'Make this meal lighter'}</button>`;
-      openOverlay(`<h2>Meal ${o.order}</h2><p class="lead">This target is based on what is still available today. Choose your foods, log it as planned, enter what you actually ate, or skip it and AdaptIM will redivide what remains.</p>${targetCells(m)}<div class="macro-log-grid"><label>Carbs (g)<input id="actualCarbs" class="text-input" type="number" min="0" inputmode="decimal" value="${m.carbs}"></label><label>Protein (g)<input id="actualProtein" class="text-input" type="number" min="0" inputmode="decimal" value="${m.protein}"></label><label>Fat (g)<input id="actualFat" class="text-input" type="number" min="0" inputmode="decimal" value="${m.fat}"></label></div><div class="sheet-stack"><button class="primary" id="swapFoods">Choose / Swap Foods</button>${lighterAction}<button class="secondary" id="logPlanned">Log as planned</button><button class="secondary" id="logActual">Log entered amounts</button><button class="danger-lite" id="skipOccasion">Skip this meal</button></div>`);
+      const lighterAction=provider.fullOccasionsOnly?'':`<button class="meal-quiet-btn" id="toggleLighter">${o.size==='light'?'Standard size':'Make lighter'}</button>`;
+      openOverlay(`<div class="meal-detail"><h2>Meal ${o.order}</h2><p class="meal-detail-lead">AdaptIM will rebalance what remains.</p>${targetCells(m)}<button class="meal-food-action" id="swapFoods"><span><strong>Choose foods</strong><small>${o.selection?Object.values(o.selection).filter(Boolean).join(' · '):'Build this meal from your target.'}</small></span><span class="meal-action-arrow">›</span></button><button class="meal-primary-action" id="logPlanned">Log as planned</button><div class="meal-quiet-actions"><button class="meal-quiet-btn" id="adjustAmounts">Adjust amounts</button>${lighterAction}</div><div class="meal-adjust-panel" id="mealAdjustPanel"><div class="macro-log-grid"><label>Carbs<input id="actualCarbs" class="text-input" type="number" min="0" inputmode="decimal" value="${m.carbs}"></label><label>Protein<input id="actualProtein" class="text-input" type="number" min="0" inputmode="decimal" value="${m.protein}"></label><label>Fat<input id="actualFat" class="text-input" type="number" min="0" inputmode="decimal" value="${m.fat}"></label></div><button class="meal-primary-action" id="logActual">Log entered amounts</button></div><button class="meal-skip" id="skipOccasion">Skip meal</button></div>`);
       $('swapFoods').onclick=()=>openFoodSwap(o.id);
-      if($('toggleLighter')) $('toggleLighter').onclick=()=>toggleOccasionSize(o.id);
       $('logPlanned').onclick=()=>commitOccasion(o.id,m);
+      $('adjustAmounts').onclick=()=>{
+        const panel=$('mealAdjustPanel');
+        panel.classList.toggle('show');
+        $('adjustAmounts').textContent=panel.classList.contains('show')?'Hide amounts':'Adjust amounts';
+        if(panel.classList.contains('show')) setTimeout(()=>panel.scrollIntoView({block:'nearest',behavior:'smooth'}),20);
+      };
+      if($('toggleLighter')) $('toggleLighter').onclick=()=>toggleOccasionSize(o.id);
       $('logActual').onclick=()=>commitOccasion(o.id,{carbs:Math.max(0,parseFloat($('actualCarbs').value)||0),protein:Math.max(0,parseFloat($('actualProtein').value)||0),fat:Math.max(0,parseFloat($('actualFat').value)||0)});
       $('skipOccasion').onclick=()=>skipOccasion(o.id);
     }else{
       const m=o.actual||{carbs:0,protein:0,fat:0};
-      openOverlay(`<h2>Meal ${o.order}</h2><p class="lead">${o.status==='logged'?'Logged amounts':'This meal was skipped.'}</p>${o.status==='logged'?targetCells(m):''}<div class="sheet-stack"><button class="secondary" id="reopenOccasion">Reopen meal</button></div>`);
+      openOverlay(`<h2>Meal ${o.order}</h2><p class="meal-detail-lead">${o.status==='logged'?'Logged':'Skipped'}</p>${o.status==='logged'?targetCells(m):''}<div class="sheet-stack"><button class="secondary" id="reopenOccasion">Reopen meal</button></div>`);
       $('reopenOccasion').onclick=()=>reopenOccasion(o.id);
     }
   }
@@ -1839,14 +1989,29 @@
     const provider=PROVIDERS[state.providerId] || PROVIDERS.adaptim;
     const options=provider.foodOptions || PROVIDERS.adaptim.foodOptions || {protein:[],carbs:[],fat:[],vegetable:[]};
     const draft={...(o.selection||{})};
-    const group=(key,title)=>`<div class="food-group"><div class="food-group-title">${title}</div><div class="food-choice-grid">${(options[key]||[]).map(item=>`<button class="food-chip ${draft[key]===item?'selected':''}" data-food-key="${key}" data-food-value="${item}">${item}</button>`).join('')}</div></div>`;
-    openOverlay(`<h2>Choose / Swap Foods</h2><p class="lead">Choose the foods you want for Meal ${o.order}. Pick what sounds good. AdaptIM keeps the meal target in view.</p>${group('protein','Protein')}${group('carbs','Carbohydrate')}${group('fat','Fat')}${group('vegetable','Vegetable')}<div class="sheet-actions"><button class="secondary" id="cancelFoodSwap">Cancel</button><button class="primary" id="saveFoodSwap">Use these foods</button></div>`);
+    ['protein','carbs','fat','vegetable'].forEach(k=>{if(!draft[k] && options[k]?.length) draft[k]=options[k][0];});
+    const titles={protein:'Protein',carbs:'Carb',fat:'Fat',vegetable:'Vegetable'};
+    const row=(key)=>{
+      const selected=draft[key]||'Choose';
+      return `<div class="food-select-row" data-food-row="${key}"><div class="food-select-main"><div class="food-visual" data-food-icon="${key}">${foodIcon(selected,key)}</div><div class="food-select-copy"><div class="food-select-label">${titles[key]}</div><div class="food-select-name" data-food-name="${key}">${selected}</div></div><button class="food-swap-btn" data-swap-key="${key}">Swap</button></div><div class="food-carousel-wrap" data-carousel-wrap="${key}"><div class="food-carousel">${(options[key]||[]).map(item=>`<button class="food-card ${draft[key]===item?'selected':''}" data-food-key="${key}" data-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`).join('')}</div></div></div>`;
+    };
+    openOverlay(`<h2>Choose foods</h2><p class="food-builder-lead">Meal ${o.order} · Swap anything that doesn’t sound good.</p><div class="food-builder-stack">${row('protein')}${row('carbs')}${row('fat')}${row('vegetable')}</div><div class="food-builder-actions"><button class="primary" id="saveFoodSwap">Use this meal</button><button class="food-cancel-link" id="cancelFoodSwap">Cancel</button></div>`);
+    document.querySelectorAll('[data-swap-key]').forEach(b=>b.onclick=()=>{
+      const key=b.dataset.swapKey;
+      document.querySelectorAll('[data-carousel-wrap]').forEach(w=>w.classList.toggle('show',w.dataset.carouselWrap===key && !w.classList.contains('show')));
+      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`);
+      if(wrap?.classList.contains('show')) setTimeout(()=>wrap.scrollIntoView({block:'nearest',behavior:'smooth'}),30);
+    });
     document.querySelectorAll('[data-food-key]').forEach(b=>b.onclick=()=>{
-      draft[b.dataset.foodKey]=b.dataset.foodValue;
-      document.querySelectorAll(`[data-food-key="${b.dataset.foodKey}"]`).forEach(x=>x.classList.toggle('selected',x===b));
+      const key=b.dataset.foodKey, value=b.dataset.foodValue;
+      draft[key]=value;
+      document.querySelectorAll(`[data-food-key="${key}"]`).forEach(x=>x.classList.toggle('selected',x===b));
+      const name=document.querySelector(`[data-food-name="${key}"]`); if(name) name.textContent=value;
+      const icon=document.querySelector(`[data-food-icon="${key}"]`); if(icon) icon.textContent=foodIcon(value,key);
+      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`); if(wrap) setTimeout(()=>wrap.classList.remove('show'),120);
     });
     $('cancelFoodSwap').onclick=()=>{closeOverlay();openOccasion(id);};
-    $('saveFoodSwap').onclick=()=>{o.selection=draft;saveState();closeOverlay();renderMealBuilder();toast('Foods updated');};
+    $('saveFoodSwap').onclick=()=>{o.selection=draft;saveState();closeOverlay();renderMealBuilder();toast('Meal updated');openOccasion(id);};
   }
   function toggleOccasionSize(id){
     const o=getOccasion(id); if(!o || o.status!=='open') return;
