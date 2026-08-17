@@ -1737,6 +1737,63 @@
   }
   .shell.tactical .badge-thinking{opacity:1}
 
+
+  /* ---------- SAFE TACTICAL AVATAR PATCH: NO MARKUP / NO JS CHANGES ---------- */
+
+  /* Remove the baton/strap/pack overlay without touching its HTML structure. */
+  .shell.tactical .tactical-kit{
+    display:none !important;
+  }
+
+  /* Reuse the avatar's existing chest badge as a small blue metal plate. */
+  .shell.tactical .badge-thinking{
+    opacity:1 !important;
+    left:50% !important;
+    top:65.5% !important;
+    width:15px !important;
+    height:15px !important;
+    transform:translate(-50%,-50%) rotate(30deg) !important;
+    border-radius:3px !important;
+    border:1px solid rgba(232,240,255,.78) !important;
+    background:
+      linear-gradient(145deg,
+        #e9f1ff 0%,
+        #b9cef2 30%,
+        #779bd8 58%,
+        #3f67ad 82%,
+        #284a84 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(8,18,34,.32),
+      0 1px 2px rgba(0,0,0,.28),
+      0 0 8px rgba(47,140,255,.22) !important;
+    animation:badgePulse 6s ease-in-out infinite !important;
+    z-index:7 !important;
+  }
+
+  /* Red medical cross, visually upright even though the plate is angled. */
+  .shell.tactical .badge-thinking::before,
+  .shell.tactical .badge-thinking::after{
+    content:"" !important;
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    background:#d62f2f !important;
+    border-radius:1px !important;
+    box-shadow:0 0 2px rgba(198,40,40,.26) !important;
+  }
+
+  .shell.tactical .badge-thinking::before{
+    width:4px !important;
+    height:10px !important;
+    transform:translate(-50%,-50%) rotate(-30deg) !important;
+  }
+
+  .shell.tactical .badge-thinking::after{
+    width:10px !important;
+    height:4px !important;
+    transform:translate(-50%,-50%) rotate(-30deg) !important;
+  }
+
 </style>
 
 </head>
