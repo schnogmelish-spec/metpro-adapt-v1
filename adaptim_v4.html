@@ -2427,6 +2427,122 @@
     }
   }
 
+
+  /* ---------- EXPLICIT NUTRITION INFO BUTTON ---------- */
+  .food-card-info{
+    position:absolute;
+    top:6px;
+    right:6px;
+    z-index:3;
+    width:17px;
+    height:17px;
+    border:1px solid #d8e1eb;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.94);
+    color:#8291a4;
+    font-size:9px;
+    font-weight:700;
+    font-style:normal;
+    line-height:1;
+    box-shadow:0 1px 4px rgba(29,52,80,.05);
+  }
+  .food-card-info:active{transform:scale(.92)}
+  .food-inline-info{
+    width:23px;height:23px;
+    border:1px solid #dbe3ec;
+    border-radius:50%;
+    background:#fff;
+    color:#8291a4;
+    font-size:10px;
+    font-weight:700;
+    line-height:1;
+    padding:0;
+    cursor:pointer;
+  }
+  .food-inline-info:active{transform:scale(.94)}
+  .food-card-icon,
+  .food-item-line .food-visual{cursor:default !important}
+  .food-info-hint b{
+    display:inline-grid;
+    place-items:center;
+    width:14px;height:14px;
+    margin:0 1px;
+    border:1px solid #d7e0e9;
+    border-radius:50%;
+    font-size:8px;
+    color:#7f8ea1;
+    vertical-align:1px;
+  }
+
+  /* ---------- OPTIONAL VEGETABLES ---------- */
+  .food-category-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .food-optional-label{
+    font-size:8.5px;
+    color:#9aa6b5;
+    font-weight:560;
+    letter-spacing:.2px;
+  }
+  .vegetable-add-primary{
+    appearance:none;
+    border:1px solid #dfe7f0;
+    background:#fbfcfe;
+    color:#55708d;
+    min-height:39px;
+    padding:0 13px;
+    border-radius:13px;
+    font-size:11px;
+    font-weight:570;
+    cursor:pointer;
+  }
+  .vegetable-add-primary:active{transform:scale(.985)}
+  .vegetable-adjust-note{
+    min-height:0;
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    text-align:center;
+    color:#7c8ea3;
+    font-size:9.6px;
+    line-height:1.25;
+    margin:0;
+    transition:opacity .22s ease,max-height .22s ease,margin .22s ease;
+  }
+  .vegetable-adjust-note.show{
+    opacity:1;
+    max-height:22px;
+    margin:7px 0 0;
+  }
+
+  .shell.tactical .food-card-info{
+    background:rgba(11,24,39,.96);
+    border-color:#32475d;
+    color:#8fa5bb;
+    box-shadow:0 1px 5px rgba(0,0,0,.22);
+  }
+  .shell.tactical .food-inline-info{
+    background:#0a1624;
+    border-color:#30455b;
+    color:#8fa5bb;
+  }
+  .shell.tactical .food-info-hint b{
+    border-color:#31475d;
+    color:#8ea4bb;
+  }
+  .shell.tactical .food-optional-label{color:#75889d}
+  .shell.tactical .vegetable-add-primary{
+    background:#0a1624;
+    border-color:#2d4258;
+    color:#9eb2c7;
+  }
+  .shell.tactical .vegetable-adjust-note{color:#7f95ac}
+
 </style>
 
 </head>
@@ -3773,13 +3889,35 @@
     const b=macrosForFood(pair[1].x.def,counts[pair[1].i])[primary]||0;
     return {left:a,right:b,share:(a+b)>0?a/(a+b):.5};
   }
-  function fitScore(total,target,counts,items,balance={}){
+  function itemFitId(item){ return `${item.key}:${item.slot}:${item.name}`; }
+  function fitScore(total,target,counts,items,balance={},context={}){
     const dc=(total.carbs-(target.carbs||0))/3;
     const dp=(total.protein-(target.protein||0))/3;
     const df=(total.fat-(target.fat||0))/2;
     let score=dc*dc+dp*dp+df*df;
+
     // Small preference for normal, practical serving sizes; macro accuracy dominates.
-    counts.forEach((n,i)=>{ const ideal=items[i].def.ideal ?? items[i].def.min; score += .012*Math.pow(n-ideal,2); });
+    counts.forEach((n,i)=>{
+      const item=items[i], ideal=item.def.ideal ?? item.def.min;
+      score += .012*Math.pow(n-ideal,2);
+
+      // Vegetable priority:
+      // Once vegetables are intentionally added, keep a practical vegetable serving,
+      // preserve the already-fit protein/fat portions when possible, and let the
+      // selected carb source absorb most of the adjustment.
+      if(context?.vegetablePriority){
+        if(item.key==='vegetable'){
+          score += 1.55*Math.pow(n-ideal,2);
+        }else if(item.key==='protein' || item.key==='fat'){
+          const anchor=context.anchorCounts?.[itemFitId(item)];
+          if(Number.isFinite(anchor)){
+            const weight=item.key==='protein'?1.45:1.20;
+            score += weight*Math.pow(n-anchor,2);
+          }
+        }
+      }
+    });
+
     // If a category has two foods, honor the person's balance preference while
     // still allowing the whole-meal macro fit to win when the exact split is impossible.
     ['protein','carbs','fat','vegetable'].forEach(key=>{
@@ -3790,9 +3928,9 @@
     return score;
   }
   function totalFromCounts(items,counts){ return sumMacroVectors(items.map((x,i)=>macrosForFood(x.def,counts[i]))); }
-  function improveFit(items,target,start,balance={}){
+  function improveFit(items,target,start,balance={},context={}){
     let counts=start.map((n,i)=>Math.max(items[i].def.min,Math.min(items[i].def.max,Math.round(n))));
-    let total=totalFromCounts(items,counts), score=fitScore(total,target,counts,items,balance);
+    let total=totalFromCounts(items,counts), score=fitScore(total,target,counts,items,balance,context);
     for(let iter=0;iter<260;iter++){
       let best=null;
       for(let i=0;i<items.length;i++){
@@ -3800,7 +3938,7 @@
           const next=counts[i]+dir, d=items[i].def;
           if(next<d.min || next>d.max) continue;
           const candidate=[...counts];candidate[i]=next;
-          const t=totalFromCounts(items,candidate), sc=fitScore(t,target,candidate,items,balance);
+          const t=totalFromCounts(items,candidate), sc=fitScore(t,target,candidate,items,balance,context);
           if(sc+1e-7<score && (!best || sc<best.score)) best={counts:candidate,total:t,score:sc};
         }
       }
@@ -3838,7 +3976,7 @@
     });
     return start;
   }
-  function fitMealToFoods(selection,target,balance={}){
+  function fitMealToFoods(selection,target,balance={},fitOptions={}){
     const keys=['protein','carbs','fat','vegetable'];
     const items=[];
     keys.forEach(key=>{
@@ -3847,6 +3985,32 @@
       });
     });
     if(!items.length) return null;
+
+    // When vegetables are present, first solve the same meal without vegetables.
+    // That gives us the user's existing protein/fat plate as an anchor. We then
+    // add the vegetable and re-solve, allowing the carb serving to move most freely.
+    let fitContext={};
+    let baseFit=null;
+    const hasVegetable=normalizeFoodChoices(selection?.vegetable).length>0;
+    if(hasVegetable && !fitOptions.skipVegetablePriority){
+      const baseSelection={
+        protein:normalizeFoodChoices(selection?.protein),
+        carbs:normalizeFoodChoices(selection?.carbs),
+        fat:normalizeFoodChoices(selection?.fat),
+        vegetable:[]
+      };
+      baseFit=fitMealToFoods(baseSelection,target,balance,{skipVegetablePriority:true});
+      const anchorCounts={};
+      if(baseFit?.portions){
+        ['protein','carbs','fat'].forEach(key=>{
+          (baseFit.portions[key]||[]).forEach(p=>{
+            anchorCounts[`${key}:${p.slot}:${p.name}`]=p.steps;
+          });
+        });
+      }
+      fitContext={vegetablePriority:true,anchorCounts};
+    }
+
     const starts=[];
     starts.push(items.map(x=>x.def.min));
     starts.push(items.map(x=>x.def.ideal ?? x.def.min));
@@ -3858,8 +4022,23 @@
       return per>0 ? Math.round(((target?.[primary]||0)/sameCategoryCount)/per) : (x.def.ideal ?? x.def.min);
     }));
     starts.push(balancedStart(items,target,balance));
+
+    // Start once from the pre-vegetable plate: keep protein/fat where they were,
+    // keep the previous carb serving as the starting point, and add vegetables
+    // at their practical ideal. The optimizer can then trim carbs first.
+    if(baseFit && fitContext.anchorCounts){
+      starts.push(items.map(x=>{
+        if(x.key==='vegetable') return x.def.ideal ?? x.def.min;
+        const anchor=fitContext.anchorCounts[itemFitId(x)];
+        return Number.isFinite(anchor)?anchor:(x.def.ideal ?? x.def.min);
+      }));
+    }
+
     let best=null;
-    starts.forEach(start=>{const r=improveFit(items,target,start,balance);if(!best||r.score<best.score) best=r;});
+    starts.forEach(start=>{
+      const r=improveFit(items,target,start,balance,fitContext);
+      if(!best||r.score<best.score) best=r;
+    });
     const total={carbs:round1(best.total.carbs),protein:round1(best.total.protein),fat:round1(best.total.fat)};
     const delta={carbs:round1(total.carbs-(target.carbs||0)),protein:round1(total.protein-(target.protein||0)),fat:round1(total.fat-(target.fat||0))};
     const within=Math.abs(delta.carbs)<=3 && Math.abs(delta.protein)<=3 && Math.abs(delta.fat)<=2;
@@ -4113,7 +4292,9 @@
     const balance={protein:.5,carbs:.5,fat:.5,vegetable:.5,...(o.foodBalance||o.foodPlan?.balance||{})};
     keys.forEach(k=>{
       draft[k]=normalizeFoodChoices(o.selection?.[k]);
-      if(!draft[k].length && options[k]?.length) draft[k]=[options[k][0]];
+      // Protein / carb / fat start with a practical default choice.
+      // Vegetables are intentionally optional and remain empty until requested.
+      if(k!=='vegetable' && !draft[k].length && options[k]?.length) draft[k]=[options[k][0]];
       balance[k]=clamp(Number(balance[k])||.5,.3,.7);
     });
     const target=o.planned||{carbs:0,protein:0,fat:0};
@@ -4125,25 +4306,34 @@
         const familySelected=family.children.some(child=>draft[key].includes(child));
         return `<button class="food-card family-card ${familySelected?'selected':''}" data-food-family-key="${key}" data-food-family="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`;
       }
-      return `<button class="food-card ${draft[key].includes(item)?'selected':''}" data-food-key="${key}" data-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`;
+      return `<button class="food-card ${draft[key].includes(item)?'selected':''}" data-food-key="${key}" data-food-value="${item}"><span class="food-card-info" data-food-card-info="${item}" aria-label="Nutrition information">i</span><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`;
     }).join('');
     const familyPanels=(key)=> Object.entries(FOOD_FAMILIES)
       .filter(([family,def])=>def.category===key && (options[key]||[]).includes(family))
-      .map(([family,def])=>`<div class="food-family-panel" data-family-panel="${key}-${family}"><div class="food-family-head"><button class="food-family-back" data-family-back="${key}">‹ ${titles[key]}</button><div class="food-family-title">${family}</div><span class="food-family-spacer"></span></div><div class="food-carousel">${def.children.map(item=>`<button class="food-card food-family-card ${draft[key].includes(item)?'selected':''}" data-family-food-key="${key}" data-family-food-value="${item}"><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`).join('')}</div></div>`).join('');
+      .map(([family,def])=>`<div class="food-family-panel" data-family-panel="${key}-${family}"><div class="food-family-head"><button class="food-family-back" data-family-back="${key}">‹ ${titles[key]}</button><div class="food-family-title">${family}</div><span class="food-family-spacer"></span></div><div class="food-carousel">${def.children.map(item=>`<button class="food-card food-family-card ${draft[key].includes(item)?'selected':''}" data-family-food-key="${key}" data-family-food-value="${item}"><span class="food-card-info" data-food-card-info="${item}" aria-label="Nutrition information">i</span><div class="food-card-icon">${foodIcon(item,key)}</div><div class="food-card-name">${item}</div></button>`).join('')}</div></div>`).join('');
     const itemLine=(key,slot)=>{
       const selected=draft[key][slot]||'';
       const portion=fit?.portions?.[key]?.[slot]?.portion||'—';
-      const remove=slot===1?`<button class="food-remove-btn" data-remove-key="${key}" aria-label="Remove second ${titles[key].toLowerCase()}">×</button>`:'';
-      return `<div class="food-item-line" data-food-item="${key}-${slot}" ${selected?'':'style="display:none"'}><div class="food-visual" data-food-icon="${key}-${slot}">${selected?foodIcon(selected,key):''}</div><div class="food-select-copy"><div class="food-select-name" data-food-name="${key}-${slot}">${selected}</div><div class="food-select-portion" data-food-portion="${key}-${slot}">${portion}</div></div><div class="food-item-actions"><button class="food-swap-btn" data-swap-key="${key}" data-swap-slot="${slot}">Swap</button>${remove}</div></div>`;
+      const removable=slot===1 || key==='vegetable';
+      const remove=removable?`<button class="food-remove-btn" data-remove-key="${key}" data-remove-slot="${slot}" aria-label="Remove ${titles[key].toLowerCase()}">×</button>`:'';
+      return `<div class="food-item-line" data-food-item="${key}-${slot}" ${selected?'':'style="display:none"'}><div class="food-visual" data-food-icon="${key}-${slot}">${selected?foodIcon(selected,key):''}</div><div class="food-select-copy"><div class="food-select-name" data-food-name="${key}-${slot}">${selected}</div><div class="food-select-portion" data-food-portion="${key}-${slot}">${portion}</div></div><div class="food-item-actions"><button class="food-inline-info" data-selected-info-key="${key}" data-selected-info-slot="${slot}" aria-label="Nutrition information">i</button><button class="food-swap-btn" data-swap-key="${key}" data-swap-slot="${slot}">Swap</button>${remove}</div></div>`;
     };
     const balanceBlock=(key)=>{
       const idx=balanceIndexFromRatio(balance[key]);
       const left=Math.round(balanceRatioFromIndex(idx)*100), right=100-left;
       return `<div class="food-balance-block" data-balance-block="${key}"><div class="food-balance-meta"><span>Balance</span><b data-balance-value="${key}">${left} / ${right}</b></div><input class="food-balance-slider" data-balance-slider="${key}" type="range" min="-2" max="2" step="1" value="${idx}" aria-label="Balance ${titles[key].toLowerCase()} foods"><div class="food-balance-note" data-balance-note="${key}"></div></div>`;
     };
-    const row=(key)=>`<div class="food-select-row double-food" data-food-row="${key}"><div class="food-category-head"><div class="food-select-label">${titles[key]}</div></div>${itemLine(key,0)}${balanceBlock(key)}${itemLine(key,1)}<button class="food-add-btn" data-add-key="${key}" ${draft[key].length>=2?'style="display:none"':''}>+ Add another</button><div class="food-carousel-wrap" data-carousel-wrap="${key}" data-active-slot="0"><div class="food-carousel" data-main-food-carousel="${key}">${optionCards(key)}</div>${familyPanels(key)}</div></div>`;
+    const row=(key)=>{
+      const optional=key==='vegetable'?'<span class="food-optional-label">Optional</span>':'';
+      const addVegetable=key==='vegetable'
+        ? `<button class="vegetable-add-primary" data-add-vegetable ${draft[key].length?'style="display:none"':''}>+ Add vegetable</button>`
+        : '';
+      const addAnother=`<button class="food-add-btn" data-add-another-key="${key}" ${draft[key].length===1?'':'style="display:none"'}>+ Add another</button>`;
+      const adjustNote=key==='vegetable'?'<div class="vegetable-adjust-note" id="vegetableAdjustNote">Portions adjusted to make room</div>':'';
+      return `<div class="food-select-row double-food ${key==='vegetable'?'optional-vegetable-row':''}" data-food-row="${key}"><div class="food-category-head"><div class="food-select-label">${titles[key]}</div>${optional}</div>${itemLine(key,0)}${balanceBlock(key)}${itemLine(key,1)}${addVegetable}${addAnother}<div class="food-carousel-wrap" data-carousel-wrap="${key}" data-active-slot="0"><div class="food-carousel" data-main-food-carousel="${key}">${optionCards(key)}</div>${familyPanels(key)}</div>${adjustNote}</div>`;
+    };
 
-    openOverlay(`<div class="meal-detail"><div class="meal-page-head"><button class="back-btn" id="foodBack" aria-label="Back">‹</button><h2>Choose foods</h2><span class="meal-page-head-spacer"></span></div><p class="food-builder-lead">Meal ${o.order} · Portions adjust automatically.</p><div class="food-info-hint">Tap a food image to view the values AdaptIM is using.</div><div class="food-builder-stack">${row('protein')}${row('carbs')}${row('fat')}${row('vegetable')}</div><div id="mealFitCard">${fitCardHtml(fit)}</div><div class="food-builder-actions"><button class="primary" id="saveFoodSwap">Use this meal</button></div></div>`);
+    openOverlay(`<div class="meal-detail"><div class="meal-page-head"><button class="back-btn" id="foodBack" aria-label="Back">‹</button><h2>Choose foods</h2><span class="meal-page-head-spacer"></span></div><p class="food-builder-lead">Meal ${o.order} · Portions adjust automatically.</p><div class="food-info-hint">Tap <b>i</b> for nutrition values.</div><div class="food-builder-stack">${row('protein')}${row('carbs')}${row('fat')}${row('vegetable')}</div><div id="mealFitCard">${fitCardHtml(fit)}</div><div class="food-builder-actions"><button class="primary" id="saveFoodSwap">Use this meal</button></div></div>`);
 
     const balanceStates={};
     const normalizeBalanceStates=()=>{
@@ -4204,7 +4394,12 @@
         const icon=document.querySelector(`[data-food-icon="${key}-${slot}"]`); if(icon) icon.innerHTML=selected?foodIcon(selected,key):'';
         const portion=document.querySelector(`[data-food-portion="${key}-${slot}"]`); if(portion) portion.textContent=fit?.portions?.[key]?.[slot]?.portion||'—';
       });
-      const add=document.querySelector(`[data-add-key="${key}"]`); if(add) add.style.display=draft[key].length<2?'inline-block':'none';
+      const addAnother=document.querySelector(`[data-add-another-key="${key}"]`);
+      if(addAnother) addAnother.style.display=draft[key].length===1?'inline-block':'none';
+      if(key==='vegetable'){
+        const addVeg=document.querySelector('[data-add-vegetable]');
+        if(addVeg) addVeg.style.display=draft[key].length?'none':'inline-block';
+      }
       document.querySelectorAll(`[data-food-key="${key}"]`).forEach(card=>card.classList.toggle('selected',draft[key].includes(card.dataset.foodValue)));
       document.querySelectorAll(`[data-family-food-key="${key}"]`).forEach(card=>card.classList.toggle('selected',draft[key].includes(card.dataset.familyFoodValue)));
       document.querySelectorAll(`[data-food-family-key="${key}"]`).forEach(card=>{
@@ -4218,6 +4413,14 @@
       fit=fitMealToFoods(draft,target,balance);
       keys.forEach(updateCategoryUI);
       const card=$('mealFitCard'); if(card) card.innerHTML=fitCardHtml(fit);
+    };
+    let vegetableNoticeTimer=null;
+    const showVegetableAdjustment=()=>{
+      const note=$('vegetableAdjustNote');
+      if(!note) return;
+      clearTimeout(vegetableNoticeTimer);
+      note.classList.add('show');
+      vegetableNoticeTimer=setTimeout(()=>note.classList.remove('show'),1700);
     };
     const resetFamilyView=(wrap)=>{
       if(!wrap) return;
@@ -4241,6 +4444,7 @@
     };
     const chooseFood=(key,value,wrap)=>{
       const slot=Math.max(0,Math.min(1,Number(wrap?.dataset.activeSlot)||0));
+      const addingVegetable=key==='vegetable' && !draft.vegetable.length;
       const other=slot===0?draft[key][1]:draft[key][0];
       if(other===value){toast('Already selected');return;}
       if(slot===0) draft[key][0]=value;
@@ -4249,37 +4453,45 @@
         if(draft[key].length===2 && !Number.isFinite(Number(balance[key]))) balance[key]=.5;
       }
       refreshFit();
+      if(addingVegetable) showVegetableAdjustment();
       if(wrap) setTimeout(()=>{wrap.classList.remove('show');resetFamilyView(wrap);},120);
     };
 
     normalizeBalanceStates();
     refreshFit(false);
 
-    document.querySelectorAll('[data-food-icon]').forEach(icon=>icon.onclick=(e)=>{
+    document.querySelectorAll('[data-selected-info-key]').forEach(btn=>btn.onclick=(e)=>{
       e.stopPropagation();
-      const parts=(icon.dataset.foodIcon||'').split('-');
-      const slot=Number(parts.pop());
-      const key=parts.join('-');
+      const key=btn.dataset.selectedInfoKey;
+      const slot=Number(btn.dataset.selectedInfoSlot)||0;
       const name=draft[key]?.[slot];
       if(!name) return;
       const current=fit?.portions?.[key]?.[slot]||null;
-      showFoodInfo(name,icon,current);
+      showFoodInfo(name,btn,current);
     });
 
     $('foodBack').onclick=()=>{hideFoodInfo();closeOverlay();openOccasion(id);};
-    document.querySelectorAll('[data-swap-key]').forEach(b=>b.onclick=()=>openCarousel(b.dataset.swapKey,Number(b.dataset.swapSlot)||0));
-    document.querySelectorAll('[data-add-key]').forEach(b=>b.onclick=()=>openCarousel(b.dataset.addKey,1));
+    document.querySelectorAll('[data-swap-key]').forEach(b=>b.onclick=()=>{hideFoodInfo();openCarousel(b.dataset.swapKey,Number(b.dataset.swapSlot)||0);});
+    const addVeg=document.querySelector('[data-add-vegetable]');
+    if(addVeg) addVeg.onclick=()=>{hideFoodInfo();openCarousel('vegetable',0);};
+    document.querySelectorAll('[data-add-another-key]').forEach(b=>b.onclick=()=>{hideFoodInfo();openCarousel(b.dataset.addAnotherKey,1);});
     document.querySelectorAll('[data-remove-key]').forEach(b=>b.onclick=()=>{
-      const key=b.dataset.removeKey;
-      draft[key]=draft[key].slice(0,1);balance[key]=.5;
-      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`); if(wrap) wrap.classList.remove('show');
+      hideFoodInfo();
+      const key=b.dataset.removeKey, slot=Number(b.dataset.removeSlot)||0;
+      if(slot===0 && draft[key].length>1) draft[key].splice(0,1);
+      else if(slot===0) draft[key]=[];
+      else draft[key].splice(slot,1);
+      if(draft[key].length<2) balance[key]=.5;
+      const wrap=document.querySelector(`[data-carousel-wrap="${key}"]`);
+      if(wrap){wrap.classList.remove('show');resetFamilyView(wrap);}
       refreshFit();
     });
     document.querySelectorAll('[data-food-key]').forEach(b=>b.onclick=(e)=>{
       const key=b.dataset.foodKey, value=b.dataset.foodValue;
-      if(e.target.closest('.food-card-icon')){
-        e.stopPropagation();
-        showFoodInfo(value,e.target.closest('.food-card-icon'));
+      const info=e.target.closest('.food-card-info');
+      if(info){
+        e.preventDefault();e.stopPropagation();
+        showFoodInfo(value,info);
         return;
       }
       hideFoodInfo();
@@ -4297,9 +4509,10 @@
     });
     document.querySelectorAll('[data-family-food-key]').forEach(b=>b.onclick=(e)=>{
       const key=b.dataset.familyFoodKey, value=b.dataset.familyFoodValue;
-      if(e.target.closest('.food-card-icon')){
-        e.stopPropagation();
-        showFoodInfo(value,e.target.closest('.food-card-icon'));
+      const info=e.target.closest('.food-card-info');
+      if(info){
+        e.preventDefault();e.stopPropagation();
+        showFoodInfo(value,info);
         return;
       }
       hideFoodInfo();
