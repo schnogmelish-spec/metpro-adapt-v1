@@ -3,7 +3,7 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
-BUILD_ID = "visible-portion-v4"
+BUILD_ID = "2026.08.17-01"
 
 st.set_page_config(
     page_title="AdaptIM",
@@ -52,5 +52,5 @@ st.markdown(
 )
 
 ROOT = Path(__file__).resolve().parent
-html = (ROOT / "adaptim_v4.html").read_text(encoding="utf-8")
+html = (ROOT / "adaptim.html").read_text(encoding="utf-8")
 components.html(html, height=1320, scrolling=False)
